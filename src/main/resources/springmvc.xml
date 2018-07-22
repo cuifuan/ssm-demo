@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        ">
+
+    <!--注解声明，将springmvc交给spring管理-->
+    <mvc:annotation-driven/>
+    <!--包扫描,交给spring创建对象-->
+    <context:component-scan base-package="com.ceilan"/>
+    <!-- 引入配置文件 -->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+        <property name="location" value="classpath:jdbc.properties" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+    </bean>
+
+    <!--内部资源视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--配置文件上传，普通多部分解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!--最大上传大小单位为字节 20M-->
+        <property name="maxUploadSize" value="20971520"/>
+        <!--最小上传大小单位为字节 2kb-->
+        <property name="maxInMemorySize" value="2048"/>
+        <!-- resolveLazily属性启用是为了推迟文件解析，以便在UploadAction中捕获文件大小异常-->
+        <property name="resolveLazily" value="true"/>
+        <!-- 配置的是虚拟路径 -->
+        <!-- <property name="uploadTempDir" value="/uploadFile/temp"/>    -->
+    </bean>
+
+    <!--导入spring，防止事务失效-->
+    <import resource="classpath*:spring.xml"/>
+
+</beans>
