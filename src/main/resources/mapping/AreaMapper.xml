@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ceilan.dao.AreaMapper" >
+    <insert id="insertArea" parameterType="list">
+        insert into area (address,postalcode,type)
+        values
+        <foreach collection="list" close=";" separator="," index="index" item="item">
+            (#{item.name},#{item.id},#{item.type})
+        </foreach>
+    </insert>
+    <select id="queryAreaByPostalCode" parameterType="Integer" resultType="String">
+        select address from area where postalcode=#{postalcode}
+    </select>
+</mapper>

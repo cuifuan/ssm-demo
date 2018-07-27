@@ -1,0 +1,104 @@
+<!--<link rel="stylesheet" href="https://unpkg.com/element-ui@2.4.4/lib/theme-default/index.css">-->
+<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+<link rel="stylesheet" href="css/element-ui244-theme-chalk-index.css">
+<div id="app">
+    <el-form ref="form" :model="formInline" label-width="80px">
+        <el-form-item label="身份证号:">
+            <el-input v-model="formInline.cardid" :span="5" placeholder="请输入身份证号"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+        </el-form-item>
+        <h4>cardid about info ...</h4><br>
+        <el-form-item label="地址：">
+            <el-input v-model="address" :disabled="true" prefix-icon="el-icon-succss"></el-input>
+        </el-form-item>
+        <el-form-item label="性别：">
+            <el-input v-model="sex" :disabled="true" prefix-icon="el-icon-succss"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄：">
+            <el-input v-model="age" :disabled="true" prefix-icon="el-icon-succss"></el-input>
+        </el-form-item>
+        <el-form-item label="生日：">
+            <el-input v-model="birthday" :disabled="true" prefix-icon="el-icon-succss"></el-input>
+        </el-form-item>
+    </el-form>
+</div>
+<!-- 引入样式 -->
+<!-- 引入组件库 -->
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/element-ui244-index.js"></script>
+<script type="text/javascript" src="js/axios.min.js"></script>
+<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script>
+    var Main = {
+        data() {
+            return {
+                formInline: {
+                    cardid: ''
+                },
+                address: '',
+                sex: '',
+                age: '',
+                birthday: ''
+            }
+        },
+        methods: {
+            onSubmit() {
+                let pid = this.formInline.cardid;
+                const arrVerifyCode = [1, 0, "x", 9, 8, 7, 6, 5, 4, 3, 2];
+                const Wi = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+                const Checker = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
+                if (pid.length !== 18) {
+                    this.$message({message: '请输入18位身份证号', type: 'warning'});
+                    return
+                }
+                let Ai = pid.length === 18 ? pid.substring(0, 17) : pid.slice(0, 6) + "19" + pid.slice(6, 16);
+                if (!/^\d+$/.test(Ai)) {
+                    this.$message({message: '身份证除最后一位外，必须为数字！', type: 'warning'});
+                    return
+                }
+                let yyyy = Ai.slice(6, 10), mm = Ai.slice(10, 12) - 1, dd = Ai.slice(12, 14);
+                let d = new Date(yyyy, mm, dd), year = d.getFullYear(), mon = d.getMonth(), day = d.getDate(),
+                    now = new Date();
+                if (year != yyyy || mon != mm || day != dd || d > now || now.getFullYear() - year > 140) {
+                    this.$message({message: '身份证输入错误!!!！', type: 'warning'});
+                    return
+                }
+                let i = 0, ret = 0,cardid;
+                for (i; i < 17; i++) ret += Ai.charAt(i) * Wi[i];
+                Ai += arrVerifyCode[ret %= 11];
+                if (pid.length ===18 && pid.toLowerCase() !== Ai) {
+                    pid=Ai
+                    // return
+                }else {
+                    this.$message({message: '身份证输入错误;', type: 'warning'});
+                    return
+                }
+                axios.post('getCardInfo', {cardid: pid})
+                    .then(res => {
+                        if (res.data.code === 0) {
+                            this.address = res.data.data.address;
+                            this.sex = res.data.data.sex;
+                            this.age = res.data.data.age;
+                            this.birthday = res.data.data.birthday;
+                            this.$message({message: 'success', type: 'success'});
+                        } else {
+                            this.$message({message: 'Not Found CardID！', type: 'warning'});
+                        }
+                    })
+                    .catch(error => {
+                        this.$message({message: "请求的API失效，请重试...error:" + error, type: 'error'});
+                    });
+            }
+        }
+    };
+    const Ctor = Vue.extend(Main);
+    new Ctor().$mount('#app');
+</script>
+<style>
+    #app {
+        width: 50%;
+        margin: 50px auto 0;
+    }
+</style>

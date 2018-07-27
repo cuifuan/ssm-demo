@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+    <title>身份证Demo</title>
+
+</head>
+
+<body>
+身份证号：<input id="card"/><br>
+性别：<input id="sex"/><br>
+年龄：<input id="age"/><br>
+家庭地址：<input id="address"/><br>
+生日：<input id="birthday"/>
+<script type="text/javascript" src="js/area.js"></script>
+<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $("#card").blur(function(){
+        var cid=$(this).val();
+        if(checkId(cid)){
+            //根据身份证取 省份,生日，性别
+            var sex=cid.slice(14,17)%2?"男":"女"
+            $("#sex").val(sex);
+            var age=2017-cid.slice(6,10);
+            $("#age").val(age+"岁");
+            var prov=areaCode[cid.slice(0,6)] || areaCode[cid.slice(0,4)] || areaCode[cid.slice(0,2)] || "无法确定";
+            $("#address").val(prov);
+            var birthday=(new Date(cid.slice(6,10),cid.slice(10,12)-1,cid.slice(12,14))).toLocaleDateString()
+            $("#birthday").val(birthday);
+            return true;
+        }else{
+            return false;
+        }
+    });
+
+    function checkId(pid){
+        var arrVerifyCode = [1,0,"x",9,8,7,6,5,4,3,2];
+        var Wi = [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2];
+        var Checker = [1,9,8,7,6,5,4,3,2,1,1];
+        if(pid.length != 18){
+            alert("身份证号共18位");
+            $("#card").focus();
+            return false;
+        }
+        var Ai=pid.length==18?pid.substring(0,17):pid.slice(0,6)+"19"+pid.slice(6,16);
+        if (!/^\d+$/.test(Ai)){
+            alert("身份证除最后一位外，必须为数字！");
+            $("#card").focus();
+            return false;
+        }
+        var yyyy=Ai.slice(6,10),mm=Ai.slice(10,12)-1,dd=Ai.slice(12,14);
+        var d=new Date(yyyy,mm,dd),year=d.getFullYear(),mon=d.getMonth(),day=d.getDate(),now=new Date();
+        if (year!=yyyy || mon!=mm || day!=dd || d>now || now.getFullYear()-year>140){
+            alert("身份证输入错误！");
+            $("#card").focus();
+            return false;
+        }
+        for(var i=0,ret=0;i<17;i++)  ret+=Ai.charAt(i)*Wi[i];
+        Ai+=arrVerifyCode[ret %=11];
+        return pid.length ==18 && pid.toLowerCase() != Ai?"身份证输入错误！":Ai;
+    };
+
+</script>
+</body>
+
+</html>

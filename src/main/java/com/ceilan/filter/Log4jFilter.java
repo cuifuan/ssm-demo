@@ -4,6 +4,7 @@ import org.apache.log4j.MDC;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Log4jFilter implements Filter {
@@ -49,14 +50,17 @@ public class Log4jFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String username = httpServletRequest.getParameter("username");
-
         if (username == null) {
             MDC.put("username", DEDAULT_USERID);
         } else {
             MDC.put("username", username);
         }
-        chain.doFilter(request, response);
+        request.setCharacterEncoding("utf-8");
+        httpServletResponse.setCharacterEncoding("utf-8");
+        httpServletResponse.setHeader("content-type", "text/html;charset=utf-8");
+        chain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     /**
