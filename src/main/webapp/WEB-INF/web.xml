@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-         version="4.0">
-    <!--中文处理过滤，如果不设计中文的处理下面这部分可以移除-->
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <!-- START 配置加载Spring文件的监听器-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
     <filter>
-        <filter-name>encodingFilter</filter-name>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--<filter>
+        <filter-name>cors</filter-name>
+        <filter-class>org.chinaos.filter.HeadersCORSFilter</filter-class>&lt;!&ndash;你过滤器的包 &ndash;&gt;
+    </filter>
+    <filter-mapping>
+        <filter-name>cors</filter-name>
+        <url-pattern>/*</url-pattern>&lt;!&ndash; 你开放的接口前缀  &ndash;&gt;
+    </filter-mapping>-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!--end 配置加载Spring文件的监听器-->
+    <!--START 编码过滤器 设置UTF8-->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
@@ -17,64 +42,25 @@
         </init-param>
     </filter>
     <filter-mapping>
-        <filter-name>encodingFilter</filter-name>
+        <filter-name>characterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+    <!--END 编码过滤器 设置UTF8-->
+    <!--START 加载SpringMVC配置文件-->
     <servlet>
-        <servlet-name>SpringMVC</servlet-name>
+        <servlet-name>spring-mvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:springmvc.xml</param-value>
+            <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
-        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
-        <servlet-name>SpringMVC</servlet-name>
-        <!-- 此处可以可以配置成*.do，对应struts的后缀习惯 -->
+        <servlet-name>spring-mvc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.html</url-pattern>
-    </servlet-mapping>
-    <!--log4j配置文件加载-->
-    <context-param>
-        <param-name>log4jConfigLocation</param-name>
-        <param-value>classpath:log4j.properties</param-value>
-    </context-param>
-    <!--启动一个watchdog线程每1800秒扫描一下log4j配置文件的变化-->
-    <context-param>
-        <param-name>log4jRefreshInterval</param-name>
-        <param-value>1800000</param-value>
-    </context-param>
-    <!--spring log4j监听器-->
-    <listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-    </listener>
-    <!-- 过滤器配置 -->
-    <filter>
-        <filter-name>LogResFilter</filter-name>
-        <filter-class>com.ceilan.filter.Log4jFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LogResFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!-- 配置监听器 -->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring.xml</param-value>
-    </context-param>
-
+    <!--END 加载SpringMVC配置文件-->
     <!--druid-->
     <servlet>
         <servlet-name>DruidStatView</servlet-name>
@@ -119,6 +105,13 @@
         <filter-name>druidWebStatFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 
 </web-app>

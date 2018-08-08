@@ -1,14 +1,88 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ceilan.dao.AreaMapper" >
-    <insert id="insertArea" parameterType="list">
-        insert into area (address,postalcode,type)
-        values
-        <foreach collection="list" close=";" separator="," index="index" item="item">
-            (#{item.name},#{item.id},#{item.type})
-        </foreach>
-    </insert>
-    <select id="queryAreaByPostalCode" parameterType="Integer" resultType="String">
-        select address from area where postalcode=#{postalcode}
+<mapper namespace="org.chinaos.dao.AreaMapper">
+    <resultMap id="BaseResultMap" type="org.chinaos.model.Area">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="postalcode" property="postalcode" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, postalcode, address, type
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from area
+        where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="getAreaAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from area limit 1,10
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from area
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.chinaos.model.Area">
+        insert into area (id, postalcode, address,
+        type)
+        values (#{id,jdbcType=INTEGER}, #{postalcode,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="org.chinaos.model.Area">
+        insert into area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="postalcode != null">
+                postalcode,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="postalcode != null">
+                #{postalcode,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.chinaos.model.Area">
+        update area
+        <set>
+            <if test="postalcode != null">
+                postalcode = #{postalcode,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.chinaos.model.Area">
+        update area
+        set postalcode = #{postalcode,jdbcType=INTEGER},
+        address = #{address,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

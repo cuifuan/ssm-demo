@@ -2,14 +2,14 @@
 <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
 <link rel="stylesheet" href="css/element-ui244-theme-chalk-index.css">
 <div id="app">
-    <el-form ref="form" :model="formInline" label-width="80px">
-        <el-form-item label="身份证号:">
-            <el-input v-model="formInline.cardid" :span="5" placeholder="请输入身份证号"></el-input>
+    <el-form :inline="true" :model="formInline"  label-width="80px">
+        <el-form-item label="身份证号:" :span="10">
+            <el-input  v-model="formInline.cardid"  placeholder="请输入身份证号" :span="10"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
-        <h4>cardid about info ...</h4><br>
+        <h4>返回结果：</h4><br>
         <el-form-item label="地址：">
             <el-input v-model="address" :disabled="true" prefix-icon="el-icon-succss"></el-input>
         </el-form-item>
@@ -30,6 +30,9 @@
 <script type="text/javascript" src="js/element-ui244-index.js"></script>
 <script type="text/javascript" src="js/axios.min.js"></script>
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!--<script type="text/javascript">-->
+    <!--alert(returnCitySN);-->
 <script>
     var Main = {
         data() {
@@ -42,6 +45,15 @@
                 age: '',
                 birthday: ''
             }
+        },
+        created() {
+            axios.post("addIpInfo",returnCitySN).then(res => {
+                if(res.data.code===0){
+                    console.log("IP is success!")
+                }
+            }).catch(error => {
+                console.log("ip is error=>"+error)
+            })
         },
         methods: {
             onSubmit() {
@@ -65,17 +77,20 @@
                     this.$message({message: '身份证输入错误!!!！', type: 'warning'});
                     return
                 }
-                let i = 0, ret = 0,cardid;
+                let i = 0, ret = 0, cardid;
                 for (i; i < 17; i++) ret += Ai.charAt(i) * Wi[i];
                 Ai += arrVerifyCode[ret %= 11];
-                if (pid.length ===18 && pid.toLowerCase() !== Ai) {
-                    pid=Ai
+                if (pid.length === 18 && pid.toLowerCase() !== Ai) {
+                    pid = Ai
                     // return
-                }else {
+                } else {
                     this.$message({message: '身份证输入错误;', type: 'warning'});
                     return
                 }
-                axios.post('getCardInfo', {cardid: pid})
+                axios.post('getCardInfo', {
+                    cardid: pid,
+                    ip:returnCitySN.cip
+                })
                     .then(res => {
                         if (res.data.code === 0) {
                             this.address = res.data.data.address;
@@ -98,7 +113,7 @@
 </script>
 <style>
     #app {
-        width: 50%;
+        width:100%;
         margin: 50px auto 0;
     }
 </style>
