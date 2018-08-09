@@ -1,13 +1,13 @@
 package org.chinaos.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.chinaos.model.User;
+import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.util.Map;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private String jsonUsername;
@@ -19,7 +19,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         if ("application/json".equals(request.getHeader("Content-Type"))) {
             password = this.jsonPassword;
-        }else{
+        } else {
             password = super.obtainPassword(request);
         }
 
@@ -27,12 +27,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected String obtainUsername(HttpServletRequest request){
+    protected String obtainUsername(HttpServletRequest request) {
         String username = null;
 
-        if ("application/json".equals(request.getHeader("Content-Type"))) {
+        if ("application/json".equals(request.getHeader("Content-Type")) || "application/json;charset=utf-8".equals(request.getHeader("Content-Type"))) {
             username = this.jsonUsername;
-        }else{
+        } else {
             username = super.obtainUsername(request);
         }
 
@@ -40,28 +40,23 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response){
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         if ("application/json".equals(request.getHeader("Content-Type"))) {
             try {
                 /*
                  * HttpServletRequest can be read only once
                  */
                 StringBuffer sb = new StringBuffer();
-                String line = null;
-
                 BufferedReader reader = request.getReader();
-                while ((line = reader.readLine()) != null){
+                String line;
+                while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
-
-                //json transformation
-                ObjectMapper mapper = new ObjectMapper();
-                User loginRequest = mapper.readValue(sb.toString(), User.class);
-
-                this.jsonUsername = loginRequest.getUsername();
-                this.jsonPassword = loginRequest.getPassword();
+                Map maps = (Map) JSON.parse(String.valueOf(sb));
+                this.jsonUsername = String.valueOf(maps.get("username"));
+                this.jsonPassword = String.valueOf(maps.get("password"));
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("CustomAuthenticationFilter attemptAuthentication error:" + e.getMessage());
             }
         }
 

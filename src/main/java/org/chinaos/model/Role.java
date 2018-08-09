@@ -1,6 +1,8 @@
 package org.chinaos.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 /**
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * @Author cfa  2018-07-31 
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role implements Serializable {
 
     private Integer id;

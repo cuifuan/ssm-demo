@@ -17,7 +17,7 @@
     <http auto-config="false" use-expressions="true">
         <!--关闭csrf防护-->
         <csrf disabled="true"/>
-        <intercept-url pattern="/login" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')"/>
+        <!--<intercept-url pattern="/login" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')"/>-->
         <intercept-url pattern="/reguser" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')"/>
         <intercept-url pattern="/admin" access="hasRole('ROLE_STATIC')"/>
         <!--<intercept-url pattern="" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')"/>-->
