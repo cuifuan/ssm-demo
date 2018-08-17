@@ -53,7 +53,7 @@
     <b:bean id="myBasicAuthenticationEntryPoint" class="org.chinaos.security.MyBasicAuthenticationEntryPoint"/>
 
     <b:bean id="logoutSuccessHandler" class="org.chinaos.security.LogoutSuccessHandler">
-        <b:constructor-arg value="/"/>
+        <b:constructor-arg value="/logoutsuccess"/>
     </b:bean>
 
     <b:bean id="userService" class="org.chinaos.security.UserService"/>

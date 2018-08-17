@@ -1,21 +1,19 @@
-import axios from 'axios'
-
-axios.defaults.withCredentials = true
-
-
-let base = ''
+import  axios from 'axios'
+let base = 'ssm-demo/'
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json;charset=UTF-8"
+    },
+    withCredentials: true
   })
 }
-export const uploadFileRequest = (url, params) => {
-  return axios({
+/**/
+/*export const uploadFileRequest = (url, params) => {
+  return this.$axios({
     method: 'post',
     url: `${base}${url}`,
     data: params,
@@ -46,14 +44,15 @@ export const deleteRequest = (url) => {
     method: 'delete',
     url: `${base}${url}`
   })
-}
+}*/
 export const getRequest = (url, params) => {
-  return axios({
+  return this.$axios({
     method: 'get',
+    url: `${base}${url}`,
     data: params,
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json;charset=UTF-8"
     },
-    url: `${base}${url}`
+    withCredentials: true
   })
 }

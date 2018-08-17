@@ -25,10 +25,9 @@
 </template>
 
 <script>
-  import {getRequest} from '../utils/api'
+  import {postRequest} from '../utils/api'
 
   export default {
-    name: "area",
     data() {
       return {
         tableData: []
@@ -39,9 +38,7 @@
     },
     methods: {
       getTable() {
-        console.log(111)
-        getRequest('getArea').then(res => {
-          console.log(res.data)
+        postRequest('getArea').then(res => {
           this.tableData=res.data
         }).catch(error => {
           console.log(error)

@@ -86,18 +86,5 @@
     font-family: 'Microsoft YaHei', Helvetica Neue, Helvetica, Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /*width: 100%;
-    height: 100%;
-    text-align: center;
-    position: absolute;
-    margin: 0px;
-    padding: 0px;*/
-  }
-
-  .main {
-    /*position: relative;*/
-    /*width: 80%;*/
-    /*height: 300px;*/
-    /*border: 2px solid black;*/
   }
 </style>

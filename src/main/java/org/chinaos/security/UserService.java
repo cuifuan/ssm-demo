@@ -1,7 +1,9 @@
 package org.chinaos.security;
 
+import org.chinaos.dao.MenuMapper;
 import org.chinaos.dao.RoleMapper;
 import org.chinaos.dao.UserMapper;
+import org.chinaos.model.Menu;
 import org.chinaos.model.Role;
 import org.chinaos.model.User;
 import org.chinaos.util.ResultBean;
@@ -27,6 +29,8 @@ public class UserService implements UserDetailsService {
     private UserMapper userMapper;
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private MenuMapper menuMapper;
 
 
     public int updateUserPassword(User user) {
@@ -49,7 +53,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Integer insertUser(Map map) {
         User user=new User();
-        Integer resultid;
+        int resultid;
         user.setUsername(String.valueOf(map.get("name")));
         user.setPassword(String.valueOf(map.get("pass")));
         //如果用户名存在，返回错误
@@ -69,7 +73,7 @@ public class UserService implements UserDetailsService {
         return resultid>0?ResultBean.SUCCESS:ResultBean.FAIL;
     }
 
-  
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.loadUserByUsername(username);
         if (user == null) {
@@ -81,5 +85,25 @@ public class UserService implements UserDetailsService {
         List<Role> roles = roleMapper.getRolesByUid(user.getId());
         user.setRoles(roles);
         return user;
+    }
+
+    public List<Menu> queryHasMenu(){
+        //正式版本
+        /*Object userDetails = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        if(!userDetails.toString().contains("anonymousUser")){
+            User user=(User)userDetails;
+            List<Role> roleList=user.getRoles();
+            Integer[] array = new Integer[roleList.size()];
+            for (int i = 0; i <roleList.size() ; i++) {
+                array[i]=roleList.get(i).getId();
+            }
+            return menuMapper.queryHasMenu(array);
+        }
+        return null;*/
+        //测试版本
+        Integer array[]=new Integer[]{1};
+        return menuMapper.queryHasMenu(array);
     }
 }

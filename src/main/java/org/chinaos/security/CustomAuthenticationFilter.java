@@ -2,11 +2,13 @@ package org.chinaos.security;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Map;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -17,7 +19,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected String obtainPassword(HttpServletRequest request) {
         String password = null;
 
-        if ("application/json".equals(request.getHeader("Content-Type"))) {
+        if ("application/json;charset=UTF-8".equals(request.getHeader("Content-Type"))) {
             password = this.jsonPassword;
         } else {
             password = super.obtainPassword(request);
@@ -30,7 +32,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected String obtainUsername(HttpServletRequest request) {
         String username = null;
 
-        if ("application/json".equals(request.getHeader("Content-Type")) || "application/json;charset=utf-8".equals(request.getHeader("Content-Type"))) {
+        if ("application/json;charset=UTF-8".equals(request.getHeader("Content-Type")) || "application/json;charset=utf-8".equals(request.getHeader("Content-Type"))) {
             username = this.jsonUsername;
         } else {
             username = super.obtainUsername(request);
@@ -40,8 +42,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        if ("application/json".equals(request.getHeader("Content-Type"))) {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)throws AuthenticationException {
+        if ("application/json;charset=UTF-8".equals(request.getHeader("Content-Type"))) {
             try {
                 /*
                  * HttpServletRequest can be read only once
@@ -55,8 +57,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 Map maps = (Map) JSON.parse(String.valueOf(sb));
                 this.jsonUsername = String.valueOf(maps.get("username"));
                 this.jsonPassword = String.valueOf(maps.get("password"));
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.error("CustomAuthenticationFilter attemptAuthentication error:" + e.getMessage());
+                System.out.println("CustomAuthenticationFilter attemptAuthentication error:");
             }
         }
 

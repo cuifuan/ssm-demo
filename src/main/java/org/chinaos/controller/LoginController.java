@@ -1,14 +1,15 @@
 package org.chinaos.controller;
 
+import org.chinaos.model.Menu;
 import org.chinaos.model.User;
 import org.chinaos.security.UserService;
 import org.chinaos.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,8 +17,7 @@ import java.util.Map;
  */
 @RestController
 public class LoginController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     /**
      * 登录账号或密码错误
@@ -37,12 +37,14 @@ public class LoginController {
     private static final String EXCEPTION_CREDENTIALS = "CredentialsExpiredException";
     private static final String EXCEPTION_USERNAMENOTFOUND = "UsernameNotFoundException";
 
-    @RequestMapping("/loginsuccess")
-    public User success(){
-        User user = (User) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return user;
+    @Autowired
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @RequestMapping("/menu")
+    public List<Menu> success(HttpServletRequest request){
+        return userService.queryHasMenu();
     }
     @RequestMapping("/loginerror")
     public String failurl(){
@@ -50,11 +52,9 @@ public class LoginController {
     }
 
 
-    @RequestMapping("/login_process1")
-    @ResponseBody
-    public String adminPage(){
-        //test
-        return "user";
+    @RequestMapping("/logoutsuccess")
+    public String logoutsuccess(){
+        return "注销成功";
     }
 
     @RequestMapping("/admin")
@@ -94,11 +94,6 @@ public class LoginController {
         return username;
     }
 
-    @RequestMapping(value ="reguser")
-    public Map reguser(@RequestBody Map map){
-        userService.insertUser(map);
-        return map;
-    }
     /**
      * 注册用户, 返回新对象的id
      *

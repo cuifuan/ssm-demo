@@ -15,4 +15,9 @@ public interface MenuMapper {
     List<Menu> menuTree();
 
     List<Long> getMenusByRid(Long rid);
+    /**
+     * 查询菜单
+     * created by cfa  2018-08-10 上午 12:26
+     **/
+    List<Menu> queryHasMenu(Integer[] ids);
 }

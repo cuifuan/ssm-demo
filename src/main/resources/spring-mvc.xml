@@ -9,7 +9,7 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 配置扫描器 -->
-    <context:component-scan base-package="org.chinaos.controller"/>
+    <context:component-scan base-package="org.chinaos.controller,org.chinaos.exception"/>
     <!-- 注解驱动：配置处理器映射器和适配器 -->
     <mvc:annotation-driven/>
 
@@ -20,12 +20,12 @@
         <property name="prefix" value="/WEB-INF/view/"/>
         <property name="suffix" value=".html"/>
     </bean>
-    <mvc:interceptors >
         <!--过滤所有请求，处理跨域请求问题-->
+   <!-- <mvc:interceptors >
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="org.chinaos.filter.HeadersCORSFilter"/>
         </mvc:interceptor>
-    </mvc:interceptors >
+    </mvc:interceptors >-->
 
 </beans>

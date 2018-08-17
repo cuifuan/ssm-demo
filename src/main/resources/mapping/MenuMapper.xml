@@ -45,4 +45,15 @@
     <select id="getMenusByRid" resultType="Long">
         SELECT mid from menu_role WHERE rid=#{rid}
     </select>
+
+    <select id="queryHasMenu" resultType="Menu" parameterType="java.util.ArrayList">
+        SELECT m.* from menu m
+        LEFT JOIN menu sm on m.id=sm.id and m.parentid=-1
+        WHERE m.id in (
+        SELECT menu_id FROM menu_role where role_id in
+          <foreach collection="array" item="item" separator="," open="(" close=")">
+              #{item}
+          </foreach>
+        )
+    </select>
 </mapper>

@@ -27,22 +27,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <!--<filter>
-        <filter-name>cors</filter-name>
-        <filter-class>org.chinaos.filter.HeadersCORSFilter</filter-class>&lt;!&ndash;你过滤器的包 &ndash;&gt;
-    </filter>
-    <filter-mapping>
-        <filter-name>cors</filter-name>
-        <url-pattern>/*</url-pattern>&lt;!&ndash; 你开放的接口前缀  &ndash;&gt;
-    </filter-mapping>-->
+
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -63,6 +49,26 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <!--END 加载SpringMVC配置文件-->
+
+    <!--跨域过滤器-->
+    <filter>
+        <filter-name>cros</filter-name>
+        <filter-class>org.chinaos.filter.HeadersCORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>cros</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--druid-->
     <servlet>
         <servlet-name>DruidStatView</servlet-name>

@@ -22,6 +22,8 @@
     </el-submenu>
     <el-menu-item index="3" disabled>消息中心</el-menu-item>
     <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+
+
     <el-dropdown @command="handleCommand" class="home_userinfo">
   <span class="el-dropdown-link">
     {{currentUserName}}<i class="el-icon-arrow-down el-icon-right"></i>
@@ -38,58 +40,76 @@
 
 <script>
   import {getRequest} from '../../utils/api'
+  import {postRequest} from '../../utils/api'
 
   export default {
-      name: "Header",
-      data() {
-        return {
-          activeIndex: '1',
-          activeIndex2: '1',
-          currentUserName: ''
-        };
+    name: "Header",
+    data() {
+      return {
+        activeIndex: '1',
+        activeIndex2: '1',
+        currentUserName: ''
+      }
+    },
+    created() {
+      this.currentUserName = sessionStorage.getItem('username')
+      this.initmenu()
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath)
       },
-      created() {
-       this.currentUserName=localStorage.getItem('username')
-      },
-      methods: {
-        handleSelect(key, keyPath) {
-          console.log(key, keyPath);
-        },
-        handleCommand(command){
-          var _this = this;
-          if (command === 'logout') {
-            this.$confirm('注销登录吗?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(function () {
-              getRequest("/logout")
-              _this.currentUserName = '游客';
-              localStorage.clear();
-              _this.$router.replace({path: '/'});
-            }, function () {
-              //取消
+      handleCommand(command) {
+        var _this = this
+        if (command === 'logout') {
+          this.$confirm('注销登录吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            postRequest("/logout")
+            this.currentUserName = '游客'
+            sessionStorage.clear()
+            this.$router.replace({path: '/'})
+            this.$message({
+              type: 'success',
+              message: '注销成功!'
             })
-          }
+          }).catch(() => {
+            this.$message({
+              type: 'warning',
+              message: '注销失败'
+            })
+          })
         }
+      },
+      initmenu() {
+        postRequest('/menu').then(res => {
+          console.log(res.data)
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
+  }
 </script>
 
 <style scoped>
- .el-menu-demo{
-   width: 100%;
-   height: 60px;
- }
- .home_userinfo {
-   /*position: absolute;*/
-   float: right;
-   /*display: inline;*/
-   margin-right:20px;
-   font-size: 15px;
-   margin-top: 20px;
- }
-  .el-dropdown-link{
+  .el-menu-demo {
+    width: 100%;
+    height: 60px;
+  }
+
+  .home_userinfo {
+    /*position: absolute;*/
+    float: right;
+    /*display: inline;*/
+    margin-right: 20px;
+    font-size: 15px;
+    margin-top: 20px;
+  }
+
+  .el-dropdown-link {
     color: aliceblue;
     font-size: 18px;
   }
