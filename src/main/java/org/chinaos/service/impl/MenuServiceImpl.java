@@ -24,7 +24,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> getMenusByUserId() {
-        return menuMapper.getMenusByUserId(UserUtils.getCurrentHr().getId());
+        return menuMapper.getMenusByUserId(UserUtils.getCurrentUser().getId());
     }
 
     @Override

@@ -7,7 +7,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * created by cfa  2018-08-02 下午 3:29
  **/
 public class UserUtils {
-    public static User getCurrentHr() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    public static User getCurrentUser() {
+        User user=new User();
+        Object userInfo=SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userInfo!=null&&!userInfo.toString().contains("anonymousUser")){
+            user= (User) userInfo;
+        }else{
+            user.setId(ResultBean.NO_LOGIN);
+            user.setUsername(ResultBean.TOURIST);
+        }
+        return user;
     }
+
 }

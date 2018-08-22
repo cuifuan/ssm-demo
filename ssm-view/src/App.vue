@@ -22,13 +22,18 @@
 </template>
 
 <script>
-  import header from "@/components/public/Header";
-  import left from '@/components/public/Left';
+  import {postRequest} from '@/utils/api'
+  import header from "@/components/public/Header"
+  import left from '@/components/public/Left'
 
   export default {
     name: 'app',
     data() {
       return {}
+    },
+    created() {
+      // this.initmenu()
+      // this.$refs.headerNav.getNav()
     },
     components: {
       headerNav: header,
@@ -37,14 +42,14 @@
     methods: {
       goMuisc() {
         //第一种跳转方法
-        this.$router.push('/home');  //此处的名称必须和main.js路由规则配置的path值一致
+        this.$router.push('/home')  //此处的名称必须和main.js路由规则配置的path值一致
 
       },
       testParams() {
         //查询字符串的方式，比如  /music_country?id=1&name=2
         this.$router.push({
           name: 'music', query: {id: 1, name: 2}
-        });
+        })
 
       }
     }
@@ -82,8 +87,8 @@
     width: 100%;
     height: 100%;
     margin: 0;
-    overflow: hidden;
-    font-family: 'Microsoft YaHei', Helvetica Neue, Helvetica, Arial,sans-serif;
+    /*overflow: hidden;*/
+    font-family: 'Microsoft YaHei', Helvetica Neue, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

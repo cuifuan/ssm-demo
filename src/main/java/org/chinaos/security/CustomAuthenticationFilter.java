@@ -62,7 +62,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 System.out.println("CustomAuthenticationFilter attemptAuthentication error:");
             }
         }
-
         return super.attemptAuthentication(request, response);
     }
 

@@ -19,7 +19,7 @@
     <select id="getAreaAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from area limit 1,10
+        from area
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

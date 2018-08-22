@@ -1,8 +1,11 @@
 package org.chinaos.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.chinaos.dao.AreaMapper;
 import org.chinaos.model.Area;
 import org.chinaos.service.AreaService;
+import org.chinaos.util.ResultBean;
 import org.common.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,9 +35,14 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<Area> getAreaAll() {
-        return areaMapper.getAreaAll();
+    public ResultBean getAreaAll(Map<String,Integer> map) {
+        PageHelper.startPage(map.get("pageNo"),map.get("pageSize"));
+        List<Area> list =areaMapper.getAreaAll();
+        PageInfo<Area> pageInfo = new PageInfo<>(list);
+        return new ResultBean<>(pageInfo);
     }
+
+
 
     @Override
     public String getAddress(HttpServletRequest request, HttpServletResponse response, int id) throws Exception {

@@ -22,6 +22,8 @@ public class ResultBean<T> implements Serializable {
 
     private String msg = "success";
 
+    public static final String TOURIST = "游客";
+
     private int code = SUCCESS;
 
     private T data;

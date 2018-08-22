@@ -4,6 +4,13 @@
 <configuration>
     <!-- 别名定义 -->
     <typeAliases>
-        <package name="org.chinaos.model" />
+        <package name="org.chinaos.model"/>
     </typeAliases>
+    <plugins>
+        <!-- 分页查询插件 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
 </configuration>

@@ -7,6 +7,7 @@ import org.chinaos.model.Menu;
 import org.chinaos.model.Role;
 import org.chinaos.model.User;
 import org.chinaos.util.ResultBean;
+import org.chinaos.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,6 @@ import java.util.Map;
 public class UserService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
-
 
     @Autowired
     private UserMapper userMapper;
@@ -42,35 +41,36 @@ public class UserService implements UserDetailsService {
         return userMapper.lockedByUserId(id);
     }
 
-  
+
     public int unlockUser(Integer id) {
         return userMapper.unlockUserId(id);
     }
+
     /**
      * 注册用户
      * created by cfa  2018-08-06 下午 9:51
      **/
     @Transactional
     public Integer insertUser(Map map) {
-        User user=new User();
+        User user = new User();
         int resultid;
         user.setUsername(String.valueOf(map.get("name")));
         user.setPassword(String.valueOf(map.get("pass")));
         //如果用户名存在，返回错误
-        User userlo=userMapper.loadUserByUsername(user.getUsername());
+        User userlo = userMapper.loadUserByUsername(user.getUsername());
         if (userlo != null) {
             return ResultBean.USERNAME_EXIST;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(11);
-        try{
+        try {
             String encode = encoder.encode(user.getPassword());
             user.setPassword(encode);
-            resultid=userMapper.insertSelective(user);
-        }catch (Exception e){
-            logger.error("UserService insertUser error:"+e.getMessage());
+            resultid = userMapper.insertSelective(user);
+        } catch (Exception e) {
+            logger.error("UserService insertUser error:" + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-        return resultid>0?ResultBean.SUCCESS:ResultBean.FAIL;
+        return resultid > 0 ? ResultBean.SUCCESS : ResultBean.FAIL;
     }
 
 
@@ -87,23 +87,21 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public List<Menu> queryHasMenu(){
-        //正式版本
-        /*Object userDetails = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        if(!userDetails.toString().contains("anonymousUser")){
-            User user=(User)userDetails;
-            List<Role> roleList=user.getRoles();
+    /**
+     * menu菜单
+     * created by cfa  2018-08-20 上午 10:39
+     **/
+    public List<Menu> queryHasMenu() {
+        User user = UserUtils.getCurrentUser();
+        if (user.getId() != ResultBean.NO_LOGIN) {
+            List<Role> roleList = user.getRoles();
             Integer[] array = new Integer[roleList.size()];
-            for (int i = 0; i <roleList.size() ; i++) {
-                array[i]=roleList.get(i).getId();
+            for (int i = 0; i < roleList.size(); i++) {
+                array[i] = roleList.get(i).getId();
             }
             return menuMapper.queryHasMenu(array);
+        } else {
+            return null;
         }
-        return null;*/
-        //测试版本
-        Integer array[]=new Integer[]{1};
-        return menuMapper.queryHasMenu(array);
     }
 }

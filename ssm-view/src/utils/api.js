@@ -1,5 +1,9 @@
-import  axios from 'axios'
-let base = 'ssm-demo/'
+import axios from 'axios'
+// import {Baseurl} from "../../config/dev.env"
+// import {Baseurl} from "../../config/prod.env"
+axios.defaults.withCredentials = true //让ajax携带cookie
+
+let base = 'ssm-demo'
 export const postRequest = (url, params) => {
   return axios({
     method: 'post',
@@ -7,8 +11,7 @@ export const postRequest = (url, params) => {
     data: params,
     headers: {
       "Content-Type": "application/json;charset=UTF-8"
-    },
-    withCredentials: true
+    }
   })
 }
 /**/
@@ -46,7 +49,7 @@ export const deleteRequest = (url) => {
   })
 }*/
 export const getRequest = (url, params) => {
-  return this.$axios({
+  return axios({
     method: 'get',
     url: `${base}${url}`,
     data: params,

@@ -1,14 +1,14 @@
 package org.chinaos.controller;
 
-import org.chinaos.model.Area;
 import org.chinaos.service.AreaService;
+import org.chinaos.util.HttpClientUtils;
+import org.chinaos.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AreaController {
@@ -20,14 +20,19 @@ public class AreaController {
     }
 
     @RequestMapping("/getArea")
-    public List<Area> getArea(){
-        return areaService.getAreaAll();
+    public ResultBean getArea(@RequestBody Map<String,Integer> map){
+        return areaService.getAreaAll(map);
     }
-    @RequestMapping("/getAddress")
+   /* @RequestMapping("/getAddress")
     public String getAddress(HttpServletRequest request, HttpServletResponse response) throws Exception {
 //        for (int i = 1; i < 11; i++) {
-         return areaService.getAddress(request,response,2);
+        return areaService.getAddress(request,response,2);
 //        }
+    }*/
+    @RequestMapping("/getLocation")
+    public Object getLocation() throws Exception {
+        String url="https://apis.map.qq.com/tools/geolocation?key=3PQBZ-BOBKD-GDQ4U-PLGJH-RFQCS-HABRO&referer=http://map.qq.com/api/js?v=2.exp";
+        return HttpClientUtils.getRequest(url);
     }
 
 }

@@ -8,7 +8,7 @@
         <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
+        <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码" @keyup.enter.native="submitClick('loginForm')"></el-input>
       </el-form-item>
       <el-checkbox class="login_remember" v-model="checked" label-position="left">记住密码</el-checkbox>
       <el-form-item style="width: 100%">
@@ -41,6 +41,8 @@
   import {
     postRequest
   } from '../../utils/api'
+  import {getRequest} from '../../utils/api'
+  import {staticRouters} from '../../router/index'
 
   export default {
     data() {
@@ -87,7 +89,7 @@
             trigger: 'blur'
           }]
         },
-        checked: true,
+        checked: false,
         loading: false,
         title: '系统登录',
         isLogin: true,
@@ -119,17 +121,9 @@
           this.loading = true
           postRequest('/login', this.loginForm).then(resp => {
             if (resp.data.code === 1) {
-              sessionStorage.setItem('username', resp.data.data.username)
-              let extendsRoutes = filterRoutes(res.menus);
-              //存菜单
-              sessionStorage.setItem('menus',JSON.stringify(extendsRoutes[0].children));
-              //动态添加路由
-              this.$router.addRoutes(extendsRoutes);
-              //跳转到应用界面
-              // this.$router.push({path:'/'});
-              this.$router.replace({
-                path: '/area'
-              })
+              sessionStorage.setItem("username", resp.data.data)
+              this.$message({message: '登陆成功！', type: 'success'})
+              this.$router.replace({path: '/Home'})
             } else {
               this.loading = false
               this.$message({
@@ -148,12 +142,22 @@
         })
       },
       reg() {
-        this.isLogin = false
-        this.title = '注册'
+        this.$alert('暂不提供注册，演示账号：admin\r密码：123456', '提示', {
+          confirmButtonText: '确定'
+          /*callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }*/
+        });
+        // return
+        // this.isLogin = false
+        // this.title = '注册'
       },
       goback() {
         this.isLogin = true
-        this.title = '系统登陆'
+        this.title = '后台管理系统登陆'
       },
       reguser(formName) {
         this.$refs[formName].validate((valid) => {
@@ -190,7 +194,6 @@
       }
     }
   }
-
 </script>
 <style>
   #login {
@@ -201,6 +204,7 @@
     -webkit-background-size: cover;
     background-size: 100% 100%;
     text-align: center;
+    overflow: hidden;
   }
 
   .login-container {
@@ -216,12 +220,12 @@
   .login_title {
     margin: 0px auto 40px auto;
     text-align: center;
-    color: cornsilk;
+    color: #303133;
   }
 
   .login_remember {
     margin: 0px 0px 35px 0px;
     text-align: left;
-    color: cornsilk;
+    color: #303133;
   }
 </style>
