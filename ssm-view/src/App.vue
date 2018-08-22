@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- 其他页 -->
-    <el-container v-if="$route.meta.keepAlive" class="home-container">
+    <el-container v-if="!$route.meta.keepAlive" class="home-container">
       <el-header class="home-header">
         <keep-alive>
           <!-- 导航栏 -->
@@ -16,7 +16,7 @@
       </el-container>
     </el-container>
     <!-- 登录页 -->
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <router-view v-if="$route.meta.keepAlive"></router-view>
   </div>
 
 </template>
@@ -51,7 +51,39 @@
           name: 'music', query: {id: 1, name: 2}
         })
 
-      }
+      }/*,
+      initmenu() {
+        postRequest('/router').then(res => {
+          let routesArray = []
+          let routerjson = res.data.data
+          if (routerjson == null) return
+          for (let i = 0; i < routerjson.length; i++) {
+            let pathx = routerjson[i].path
+            let keepAlivex = routerjson[i].keepAlive
+            let json = [{
+              path: pathx,
+              name: routerjson[i].name,
+              component: (resolve) => require(['@/components/' + routerjson[i].component + '.vue'], resolve),
+              meta: {
+                keepAlive: keepAlivex
+              }
+            }]
+            this.$router.addRoutes(json)
+            routesArray.push({
+              'path': pathx,
+              'component': routerjson[i].component,
+              'keepAlive': keepAlivex,
+              'name': routerjson[i].name
+            })
+          }
+          this.$router.addRoutes([{path: '*', redirect: '/404'}])
+          sessionStorage.removeItem("routes")
+          sessionStorage.setItem("routes", JSON.stringify(routesArray))
+          console.log(111)
+        }).catch(error => {
+          console.log(error)
+        })
+      }*/
     }
   }
 </script>

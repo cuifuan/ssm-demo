@@ -123,7 +123,7 @@
             if (resp.data.code === 1) {
               sessionStorage.setItem("username", resp.data.data)
               this.$message({message: '登陆成功！', type: 'success'})
-              this.$router.replace({path: '/Home'})
+              this.$router.replace({path: '/home'})
             } else {
               this.loading = false
               this.$message({

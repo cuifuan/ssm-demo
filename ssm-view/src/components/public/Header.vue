@@ -7,33 +7,29 @@
     background-color="#2c3e50"
     text-color="#fff"
     active-text-color="#ffd04b">
-    <el-menu-item v-for="(n,index) in navData" :key="index" :index="n.component">{{n.name}}</el-menu-item>
-    <!-- <el-menu-item index="area">地区</el-menu-item>
-     <el-submenu index="3">
-       <template slot="title">我的工作台</template>
-       <el-menu-item index="3-1">选项1</el-menu-item>
-       <el-menu-item index="3-2">选项2</el-menu-item>
-       <el-menu-item index="3-3">选项3</el-menu-item>
-       <el-submenu index="3-4">
-         <template slot="title">选项4</template>
-         <el-menu-item index="3-4-1">选项1</el-menu-item>
-         <el-menu-item index="3-4-2">选项2</el-menu-item>
-         <el-menu-item index="3-4-3">选项3</el-menu-item>
-       </el-submenu>
-     </el-submenu>
-     <el-menu-item index="4" disabled>消息中心</el-menu-item>
-     <el-menu-item index="5">订单管理</el-menu-item>-->
-
-
+    <template v-for="(item,index) in navData">
+      <!--<router-link v-if="item.children.length===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
+        <el-menu-item :index="item.path+'/'+item.children[0].path" :class="{'submenu-title-noDropdown':!isNest}">
+          <span v-if="item.children[0].meta&&item.children[0].meta.title">{{item.children[0].meta.title}}</span>
+        </el-menu-item>
+      </router-link>-->
+      <el-menu-item :key="index" :index="item.path" v-if="item.children.length<=0">
+        {{item.name}}
+      </el-menu-item>
+      <el-submenu v-else :index="index.toString()" :key="index">
+        <template slot="title">{{item.name}}</template>
+        <el-menu-item v-for="child in item.children" :key="child.name" :index="child.path">
+          {{child.name}}
+        </el-menu-item>
+      </el-submenu>
+    </template>
+    <!--用户名下拉框-->
     <el-dropdown @command="handleCommand" class="home_userinfo">
       <span class="el-dropdown-link">
          {{currentUserName}}<i class="el-icon-arrow-down el-icon-right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="sysMsg">系统消息</el-dropdown-item>
-        <el-dropdown-item command="MyArticle">我的文章</el-dropdown-item>
-        <el-dropdown-item command="MyHome">个人主页</el-dropdown-item>
-        <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+        <el-dropdown-item command="logout" divided>注销</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </el-menu>
@@ -47,7 +43,7 @@
     name: "Header",
     data() {
       return {
-        activeIndex: 'Home',
+        activeIndex: '1',
         currentUserName: '',
         navData: []
       }
@@ -55,12 +51,13 @@
     created() {
       this.activeIndex = this.$router.history.current.path.replace("/", "")
       this.currentUserName = sessionStorage.getItem('username')
-      // this.navData = JSON.parse(sessionStorage.getItem('routes'))
-      console.log(222)
+      this.navData = JSON.parse(sessionStorage.getItem('routes'))
+      console.log(this.navData)
     },
     methods: {
       handleSelect(key, keyPath) {
-        this.$router.replace("/" + keyPath)
+        console.log(keyPath+"---"+key)
+        this.$router.push(key)
       },
       handleCommand(command) {
         if (command === 'logout') {
@@ -84,43 +81,7 @@
             })
           })
         }
-      },
-      initmenu() {
-        postRequest('/router').then(res => {
-          let routesArray = []
-          let routerjson = res.data.data
-          if (routerjson == null) return
-          for (let i = 0; i < routerjson.length; i++) {
-            let pathx = routerjson[i].path
-            let keepAlivex = routerjson[i].keepAlive
-            let json = [{
-              path: pathx,
-              name: routerjson[i].name,
-              component: (resolve) => require(['@/components/' + routerjson[i].component + '.vue'], resolve),
-              meta: {
-                keepAlive: keepAlivex
-              }
-            }]
-            this.$router.addRoutes(json)
-            routesArray.push({
-              'path': pathx,
-              'component': routerjson[i].component,
-              'keepAlive': keepAlivex,
-              'name': routerjson[i].name
-            })
-          }
-          this.$router.addRoutes([{path: '*', redirect: '/404'}])
-          sessionStorage.removeItem("routes")
-          sessionStorage.setItem("routes", JSON.stringify(routesArray))
-          this.navData = routesArray
-          console.log(111)
-        }).catch(error => {
-          console.log(error)
-        })
       }
-    },
-    created() {
-      this.initmenu()
     }
   }
 </script>

@@ -55,6 +55,8 @@ public class UserController {
         return new ResultBean<>(userService.insertUser(map));
     }
 
+
+
     /*-----------------------------以下是测试的用例----------------------------------*/
 
 

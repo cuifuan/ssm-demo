@@ -3,7 +3,7 @@
   <!--  <iframe id="geoPage" width=100 height=100 frameborder=0
             src="https://apis.map.qq.com/tools/geolocation?key=3PQBZ-BOBKD-GDQ4U-PLGJH-RFQCS-HABRO&referer=http://map.qq.com/api/js?v=2.exp">
     </iframe>-->
-
+    <h1>{{msg}}</h1>
   </div>
 </template>
 <script>
@@ -19,7 +19,7 @@
       }
     },
     created() {
-      this.Tmap()
+      // this.Tmap()
 
       // this.getAddress()
     },
