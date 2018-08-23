@@ -8,17 +8,12 @@
     text-color="#fff"
     active-text-color="#ffd04b">
     <template v-for="(item,index) in navData">
-      <!--<router-link v-if="item.children.length===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
-        <el-menu-item :index="item.path+'/'+item.children[0].path" :class="{'submenu-title-noDropdown':!isNest}">
-          <span v-if="item.children[0].meta&&item.children[0].meta.title">{{item.children[0].meta.title}}</span>
-        </el-menu-item>
-      </router-link>-->
-      <el-menu-item :key="index" :index="item.path" v-if="item.children.length<=0">
+      <el-menu-item :key="index" :index="item.path" v-if="item.children.length===0">
         {{item.name}}
       </el-menu-item>
-      <el-submenu v-else :index="index.toString()" :key="index">
+      <el-submenu :key="index" :index="item.path" v-else>
         <template slot="title">{{item.name}}</template>
-        <el-menu-item v-for="child in item.children" :key="child.name" :index="child.path">
+        <el-menu-item v-for="(child,index2) in item.children" :key="index+'-'+index2" :index="child.path">
           {{child.name}}
         </el-menu-item>
       </el-submenu>
@@ -43,20 +38,25 @@
     name: "Header",
     data() {
       return {
-        activeIndex: '1',
+        activeIndex: '/home',
         currentUserName: '',
         navData: []
       }
     },
+    watch: {
+      $route() {
+        this.activeIndex = this.$route.fullPath
+      }
+    },
+    mounted() {
+      this.activeIndex = this.$route.fullPath
+    },
     created() {
-      this.activeIndex = this.$router.history.current.path.replace("/", "")
-      this.currentUserName = sessionStorage.getItem('username')
       this.navData = JSON.parse(sessionStorage.getItem('routes'))
-      console.log(this.navData)
+      this.currentUserName = sessionStorage.getItem('username')
     },
     methods: {
       handleSelect(key, keyPath) {
-        console.log(keyPath+"---"+key)
         this.$router.push(key)
       },
       handleCommand(command) {

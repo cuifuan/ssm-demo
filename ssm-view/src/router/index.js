@@ -111,7 +111,6 @@ function filterAsyncRouter(asyncRouterMap) { //遍历后台传来的路由字符
       }
     }
     if (route.children && route.children.length) {
-      console.log('111asasas')
       route.children = filterAsyncRouter(route.children)
     }
     return true
