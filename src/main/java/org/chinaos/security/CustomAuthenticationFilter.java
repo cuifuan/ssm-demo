@@ -17,7 +17,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected String obtainPassword(HttpServletRequest request) {
-        String password = null;
+        String password;
 
         if ("application/json;charset=UTF-8".equals(request.getHeader("Content-Type"))) {
             password = this.jsonPassword;
@@ -30,7 +30,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        String username = null;
+        String username;
 
         if ("application/json;charset=UTF-8".equals(request.getHeader("Content-Type")) || "application/json;charset=utf-8".equals(request.getHeader("Content-Type"))) {
             username = this.jsonUsername;
@@ -59,7 +59,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 this.jsonPassword = String.valueOf(maps.get("password"));
             } catch (IOException e) {
                 logger.error("CustomAuthenticationFilter attemptAuthentication error:" + e.getMessage());
-                System.out.println("CustomAuthenticationFilter attemptAuthentication error:");
             }
         }
         return super.attemptAuthentication(request, response);

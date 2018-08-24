@@ -1,42 +1,37 @@
 package org.chinaos.util;
 
 
+import com.alibaba.fastjson.JSON;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
- *
  * @author 黎杰
- *
  */
 public class HttpClientUtils {
+    private static final String URL_ERROR = "URL地址出错";
 
     public static void main(String[] args) throws Exception {
-        String url="https://apis.map.qq.com/tools/geolocation?key=3PQBZ-BOBKD-GDQ4U-PLGJH-RFQCS-HABRO&referer=http://map.qq.com/api/js?v=2.exp";
+      /*  String url="https://apis.map.qq.com/tools/geolocation?key=3PQBZ-BOBKD-GDQ4U-PLGJH-RFQCS-HABRO&referer=http://map.qq.com/api/js?v=2.exp";
         Map<String,String> map=new HashMap<>();
         map.put("key","3PQBZ-BOBKD-GDQ4U-PLGJH-RFQCS-HABRO");
-        map.put("referer","http://map.qq.com/api/js?v=2.exp");
+        map.put("referer","http://map.qq.com/api/js?v=2.exp");*/
 //         HttpClientUtils.getRequest(url,map);
 
         //      testGet();
 
         //      testPost();
+        testPost("https://www.apiopen.top/journalismApi");
     }
 
     /**
@@ -44,21 +39,22 @@ public class HttpClientUtils {
      *
      * @throws Exception
      */
-    public static String getRequest(String url) throws Exception {
+    public static Object getRequest(String url) {
 
         //创建一个httpclient对象
         CloseableHttpClient client = HttpClients.createDefault();
 
         //创建URIBuilder
-        URIBuilder uri = new URIBuilder(url);
-
-        /*for (Object key:map.entrySet()) {
-            //设置参数
-            uri.addParameter(key.toString(), String.valueOf(map.get(key)));
-        }*/
-
+        URIBuilder uri;
         //创建httpGet对象
-        HttpGet hg = new HttpGet(uri.build());
+        HttpGet hg;
+        try {
+            uri = new URIBuilder(url);
+            hg = new HttpGet(uri.build());
+        } catch (URISyntaxException e) {
+            return URL_ERROR;
+        }
+
 
         //设置请求的报文头部的编码
         hg.setHeader(
@@ -66,60 +62,48 @@ public class HttpClientUtils {
 
         //设置期望服务端返回的编码
         hg.setHeader(new BasicHeader("Accept", "text/plain;charset=utf-8"));
-
-        //请求服务
-        CloseableHttpResponse response = client.execute(hg);
-
-        //获取响应码
-        int statusCode = response.getStatusLine().getStatusCode();
-
-        if (statusCode == 200) {
-
-            //获取返回实例entity
-            HttpEntity entity = response.getEntity();
-
-            //通过EntityUtils的一个工具方法获取返回内容
-            String resStr = EntityUtils.toString(entity, "utf-8");
-
-            //输出
-            System.out.println("请求成功,请求返回内容为: " + resStr);
-            //关闭response和client
-            response.close();
-            client.close();
-            return resStr;
-//            return resStr;
-        } else {
-
-            //输出
-            System.out.println("请求失败,错误码为: " + statusCode);
-            return "error";
+        //写在try()括号里的相当于在finally里写入xx.close()的效果
+        try (
+                //请求服务
+                CloseableHttpResponse response = client.execute(hg)
+        ) {
+            //获取响应码
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200) {
+                //获取返回实例entity
+                HttpEntity entity = response.getEntity();
+                //通过EntityUtils的一个工具方法获取返回内容
+                String resStr = EntityUtils.toString(entity, "utf-8");
+                return JSON.parse(resStr);
+            } else {
+                return statusCode;
+            }
+        } catch (IOException e) {
+            return e.getMessage();
         }
 
-
-//        return statusCode;
-//        return url;
     }
 
-    public static void testPost() throws Exception {
+    public static void testPost(String url) throws Exception {
 
         //创建一个httpclient对象
         CloseableHttpClient client = HttpClients.createDefault();
 
         //创建一个post对象
-        HttpPost post = new HttpPost("http://localhost:8080/api/httpClientTestPost.do");
+        HttpPost post = new HttpPost(url);
 
         //创建一个Entity，模拟表单数据
-        List<NameValuePair> formList = new ArrayList<>();
+//        List<NameValuePair> formList = new ArrayList<>();
 
         //添加表单数据
-        formList.add(new BasicNameValuePair("username", "黎杰"));
-        formList.add(new BasicNameValuePair("password", "10086"));
+       /* formList.add(new BasicNameValuePair("username", "黎杰"));
+        formList.add(new BasicNameValuePair("password", "10086"));*/
 
         //包装成一个Entity对象
-        StringEntity entity = new UrlEncodedFormEntity(formList, "utf-8");
+//        StringEntity entity = new UrlEncodedFormEntity(formList, "utf-8");
 
         //设置请求的内容
-        post.setEntity(entity);
+//        post.setEntity(entity);
 
         //设置请求的报文头部的编码
         post.setHeader(

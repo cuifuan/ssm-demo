@@ -49,4 +49,12 @@
         )) m
         LEFT JOIN menu sm on sm.parentid=m.id
     </select>
+
+    <select id="getMenuByParentid" resultType="Menu" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from menu
+        where parentid = #{parentid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

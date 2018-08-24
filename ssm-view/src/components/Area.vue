@@ -36,7 +36,6 @@
 </template>
 
 <script>
-  import {postRequest} from '../utils/api'
 
   export default {
     data() {
@@ -59,7 +58,7 @@
     },
     methods: {
       getTable(params) {
-        postRequest('/getArea', params).then(res => {
+        this.postRequest('/getArea', params).then(res => {
           let resp=res.data.data
           this.tableData = resp.list
           this.tableCount = resp.total

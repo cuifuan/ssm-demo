@@ -11,13 +11,15 @@ const Login = resolve => require(['@/components/login/Login'], resolve)
 
 const NotFound = resolve => require(['@/components/errorPage/404'], resolve)
 
+const NoPersession = resolve => require(['@/components/errorPage/401'], resolve)
+
 /**
  * 静态路由
  */
 export const staticRouters = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -34,7 +36,19 @@ export const staticRouters = [
     meta: {
       keepAlive: true
     }
-  }
+  },
+  {
+    path: '/401',
+    name: '401',
+    component: NoPersession,
+    meta: {
+      keepAlive: true
+    }
+  }/*,
+  {
+    path: '*',
+    redirect: '/401'
+  }*/
 ]
 
 const router = new Router({
@@ -54,7 +68,7 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     if (!getRouter) {//不加这个判断，路由会陷入死循环
-      if (!getRouters("routes")) {
+      // if (!getRouters("routes")) {
         postRequest('/router').then(res => {
           let routerjson = res.data.data//后台拿到路由
           let getRouterArray = []
@@ -75,10 +89,10 @@ router.beforeEach((to, from, next) => {
           getRouter =  getRouterArray
           routerGo(to, next)//执行路由跳转方法
         })
-      } else {//从sessionStorage拿到了路由
+     /* } else {//从sessionStorage拿到了路由
         getRouter = getRouters("routes")
         routerGo(to, next)
-      }
+      }*/
     } else {
       next()
     }
@@ -97,7 +111,7 @@ function routerGo(to, next) {
   getRouter = filterAsyncRouter(getRouter) //过滤路由
   router.addRoutes(getRouter) //动态添加路由
   global.antRouter = getRouter //将路由数据传递给全局变量，做侧边栏菜单渲染工作
-  console.log(getRouter)
+  router.addRoutes([{path: '*',redirect: '/401'}])
   next({...to, replace: true})
 }
 

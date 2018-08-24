@@ -38,11 +38,11 @@
 </template>
 
 <script>
-  import {
+  /*import {
     postRequest
   } from '../../utils/api'
   import {getRequest} from '../../utils/api'
-  import {staticRouters} from '../../router/index'
+  import {staticRouters} from '../../router/index'*/
 
   export default {
     data() {
@@ -116,10 +116,11 @@
     },
     methods: {
       submitClick(formName) {
+        const vm = this
         this.$refs[formName].validate((valid) => {
           if (!valid) return
           this.loading = true
-          postRequest('/login', this.loginForm).then(resp => {
+          vm.postRequest('/login', this.loginForm).then(resp => {
             if (resp.data.code === 1) {
               sessionStorage.setItem("username", resp.data.data)
               this.$message({message: '登陆成功！', type: 'success'})
@@ -162,7 +163,7 @@
       reguser(formName) {
         this.$refs[formName].validate((valid) => {
           if (!valid) return
-          postRequest('reguser', this.ruleForm2).then(resp => {
+          this.postRequest('reguser', this.ruleForm2).then(resp => {
             let json = resp.data
             if (json.data === -909) {
               this.$message({

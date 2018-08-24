@@ -7,7 +7,6 @@ import org.chinaos.model.Menu;
 import org.chinaos.model.Role;
 import org.chinaos.model.User;
 import org.chinaos.util.ResultBean;
-import org.chinaos.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +76,9 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.loadUserByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("UserServiceImpl loadUserByUsername msg:用户名错误!");
+//            throw new UsernameNotFoundException("UserServiceImpl loadUserByUsername msg:用户名错误!");
             //避免返回null，这里返回一个不含有任何值的User对象，在后期的密码比对过程中一样会验证失败
-//            return new User();
+            return new User();
         }
         //查询用户的角色信息，并返回存入user中
         List<Role> roles = roleMapper.getRolesByUid(user.getId());
@@ -92,7 +91,7 @@ public class UserService implements UserDetailsService {
      * created by cfa  2018-08-20 上午 10:39
      **/
     public List<Menu> queryHasMenu() {
-        User user = UserUtils.getCurrentUser();
+        /*User user = UserUtils.getCurrentUser();
         if (user.getId() != ResultBean.NO_LOGIN) {
             List<Role> roleList = user.getRoles();
             Integer[] array = new Integer[roleList.size()];
@@ -102,6 +101,8 @@ public class UserService implements UserDetailsService {
             return menuMapper.queryHasMenu(array);
         } else {
             return null;
-        }
+        }*/
+        //测试版本
+        return menuMapper.queryHasMenu(new Integer[]{1});
     }
 }

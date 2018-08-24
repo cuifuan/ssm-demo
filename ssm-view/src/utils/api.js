@@ -52,10 +52,6 @@ export const getRequest = (url, params) => {
   return axios({
     method: 'get',
     url: `${base}${url}`,
-    data: params,
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8"
-    },
-    withCredentials: true
+    params: params
   })
 }

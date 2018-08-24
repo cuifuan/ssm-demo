@@ -5,6 +5,8 @@ import ElementUI from 'element-ui'
 import '@/utils/global'//全局
 // import {postRequest} from '@/utils/api'
 import 'element-ui/lib/theme-chalk/index.css'
+import {postRequest} from '@/utils/api'
+import {getRequest} from '@/utils/api'
 
 
 // import axios from 'axios'
@@ -12,8 +14,11 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 
 // Vue.prototype.$axios=axios
+Vue.prototype.postRequest=postRequest
+Vue.prototype.getRequest=getRequest
 
 Vue.use(ElementUI)
+// Vue.use(api)
 //安装插件
 // Vue.use(router);//挂载属性
 
