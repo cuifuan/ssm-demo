@@ -1,25 +1,21 @@
 package org.chinaos.filter;
-import java.io.IOException;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
+import org.chinaos.service.CustomAccessDecisionManager;
+import org.chinaos.service.CustomInvocationSecurityMetadataSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
-import org.springframework.stereotype.Component;
 
-@Component
+import javax.annotation.PostConstruct;
+import javax.servlet.*;
+import java.io.IOException;
+
+
 public class MySecurityFilter extends AbstractSecurityInterceptor implements Filter{
     @Autowired
-    private CustomInvocationSecurityMetadataSourceService  mySecurityMetadataSource;
+    private CustomInvocationSecurityMetadataSourceService mySecurityMetadataSource;
 
     @Autowired
     private CustomAccessDecisionManager myAccessDecisionManager;

@@ -1,7 +1,8 @@
 package org.chinaos.controller;
 
 import org.chinaos.model.Menu;
-import org.chinaos.security.UserService;
+import org.chinaos.service.MenuService;
+import org.chinaos.service.UserService;
 import org.chinaos.service.AreaService;
 import org.chinaos.util.ResultBean;
 import org.chinaos.util.UserUtils;
@@ -19,6 +20,8 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final AreaService areaService;
+    @Autowired
+    public MenuService menuService;
 
 
     @Autowired
@@ -32,16 +35,17 @@ public class UserController {
      * created by cfa  2018-08-20 上午 10:28
      **/
     @GetMapping(value = "/currentUserName")
-    public String currentUserName(){
+    public String currentUserName() {
         return UserUtils.getCurrentUser().getUsername();
     }
+
     /**
      * 动态路由
      * created by cfa  2018-08-20 上午 10:47
      **/
     @RequestMapping("/router")
-    public ResultBean router(){
-        return new ResultBean<>(userService.queryHasMenu());
+    public ResultBean router() {
+        return new ResultBean<>(menuService.queryHasMenu());
     }
 
     /**
@@ -60,39 +64,32 @@ public class UserController {
     /*-----------------------------以下是测试的用例----------------------------------*/
 
 
-
-
     @RequestMapping("/getNav")
-    public List<Menu> getNav(){
-        return userService.queryHasMenu();
+    public List<Menu> getNav() {
+        return menuService.queryHasMenu();
     }
 
 
-
-
-
     @RequestMapping("/logoutsuccess")
-    public String logoutsuccess(){
+    public String logoutsuccess() {
         return "注销成功";
     }
 
 
-    @RequestMapping(value = {"/404","/Access_Denied"})
-    public String errPage(HttpServletRequest request){
+    @RequestMapping(value = {"/404", "/Access_Denied"})
+    public String errPage(HttpServletRequest request) {
         return "404";
     }
 
     /**
      * 更改密码页
+     *
      * @return
      */
     @RequestMapping(value = "/changePasswordPage", method = RequestMethod.GET)
-    public String changePasswordPage(){
+    public String changePasswordPage() {
         return "changePasswordPage";
     }
-
-
-
 
 
 }

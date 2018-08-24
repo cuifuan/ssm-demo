@@ -3,20 +3,13 @@ package org.chinaos.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable, UserDetails {
+public class User {
     private Integer id;
 
     private String email;
@@ -49,75 +42,29 @@ public class User implements Serializable, UserDetails {
 
     private Date lastTime;
 
-    private String salt;
-
-    private List<Role> roles;
-
-    /**
-     * 自定义标识
-     */
-    private final String mySalt = "evy_salt:";
-
+    public User(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.locked = user.getLocked();
+        this.enable = user.getEnable();
+        this.account = user.getAccount();
+        this.credentials = user.getCredentials();
+    }
     /**
      * 注册时可使用该构造函数初始化数值
+     *
      * @param email
      * @param password
      */
-    public User(String email, String password) {
+/*    public User(String email, String password) {
         this.username = email;
         this.email = email;
         this.password = password;
-        this.enable = Boolean.TRUE.toString();
         this.account = Boolean.TRUE.toString();
         this.credentials = Boolean.TRUE.toString();
         this.locked = Boolean.TRUE.toString();
         this.createTime = new Date();
-        this.salt = this.username;
-    }
+    }*/
 
-    /**
-     * 获取标识盐
-     * @return
-     */
-    public String getCredentialsSalt(){
-        return mySalt + salt;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getType()));
-        }
-        return authorities;
-    }
-
-    /**
-     * 帐户未过期
-     **/
-    @Override
-    public boolean isAccountNonExpired() {
-        return Boolean.valueOf(this.account);
-    }
-    /**
-     * 是帐户非锁定
-     **/
-    @Override
-    public boolean isAccountNonLocked() {
-        return Boolean.valueOf(this.locked);
-    }
-    /**
-     * 凭证
-     **/
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return Boolean.valueOf(this.credentials);
-    }
-    /**
-     * 是否启用
-     **/
-    @Override
-    public boolean isEnabled() {
-        return Boolean.valueOf(this.enable);
-    }
 }

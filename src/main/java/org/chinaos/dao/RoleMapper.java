@@ -12,6 +12,11 @@ public interface RoleMapper {
     int insertSelective(Role record);
 
     Role selectByPrimaryKey(Integer id);
+    /**
+     * 获取全部的权限
+     * created by cfa  2018-08-24 下午 8:16
+     **/
+    List<Role> getRoleAll();
 
     int updateByPrimaryKeySelective(Role record);
 

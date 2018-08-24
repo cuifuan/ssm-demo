@@ -1,13 +1,13 @@
 package org.chinaos.controller;
 
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@RestController
 public class ErrorController {
 
     @RequestMapping("/404")
@@ -21,6 +21,15 @@ public class ErrorController {
     public void handlerFilterError(HttpServletRequest request){
         Throwable t = (Throwable) request.getAttribute("javax.servlet.error.exception");
         throw new BadCredentialsException(t.getMessage());
+    }
+    @RequestMapping("/hello")
+    public String hello(){
+        return "hello";
+    }
+
+    @RequestMapping("/admin")
+    public String admin(){
+        return "admin";
     }
 
 }

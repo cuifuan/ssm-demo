@@ -14,4 +14,9 @@ public interface MenuService {
      * created by cfa  2018-08-23 下午 2:14
      **/
     List<Menu> getMenuByParentid(Integer parentid);
+    /*
+     * description : 获取菜单
+     * @return java.util.List<org.chinaos.model.Menu>
+     **/
+    List<Menu> queryHasMenu();
 }
