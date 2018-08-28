@@ -50,7 +50,7 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
         for (Resource resource : resourceList) {
             List<Role> roles = roleResourceMapper.findRolesByResourceUrl(resource.getId());
             String url = resource.getUrl();
-            Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();
+            Collection<ConfigAttribute> atts = new ArrayList<>();
             for (Role role : roles) {
                 ConfigAttribute ca = new SecurityConfig(role.getType());
                 atts.add(ca);
