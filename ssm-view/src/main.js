@@ -7,6 +7,7 @@ import '@/utils/global'//全局
 import 'element-ui/lib/theme-chalk/index.css'
 import {postRequest} from '@/utils/api'
 import {getRequest} from '@/utils/api'
+import {putRequest} from '@/utils/api'
 
 
 // import axios from 'axios'
@@ -16,6 +17,7 @@ import {getRequest} from '@/utils/api'
 // Vue.prototype.$axios=axios
 Vue.prototype.postRequest=postRequest
 Vue.prototype.getRequest=getRequest
+Vue.prototype.putRequest=putRequest
 
 Vue.use(ElementUI)
 // Vue.use(api)

@@ -9,7 +9,8 @@
     active-text-color="#ffd04b">
     <template v-for="(item,index) in navData">
       <el-menu-item :key="index" :index="item.path" v-if="item.children.length===0">
-        {{item.name}}
+        <i :class="item.iconcls"></i>
+        <span>{{item.name}}</span>
       </el-menu-item>
       <el-submenu :key="index" :index="item.path" v-else>
         <template slot="title">{{item.name}}</template>
@@ -46,6 +47,7 @@
     watch: {
       $route() {
         this.activeIndex = this.$route.fullPath
+        this.navData = JSON.parse(sessionStorage.getItem('routes'))
       }
     },
     mounted() {

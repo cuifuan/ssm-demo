@@ -19,7 +19,7 @@ const NoPersession = resolve => require(['@/components/errorPage/401'], resolve)
 export const staticRouters = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -81,7 +81,8 @@ router.beforeEach((to, from, next) => {
                 'keepAlive': routerjson[i].keepAlive
               },
               'name': routerjson[i].name,
-              'children': routerjson[i].children
+              'children': routerjson[i].children,
+              'iconcls': routerjson[i].iconcls
             })
           }
           //sessionStorage 存储数组对象的方法

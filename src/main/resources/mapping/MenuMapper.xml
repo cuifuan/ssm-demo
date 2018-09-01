@@ -40,9 +40,10 @@
         from (
         SELECT
         <include refid="Base_Column_List"/>
-        from menu
-        where parentid=-1 and id in (
-        SELECT menu_id FROM menu_role where role_id in
+        from menu mu
+        where parentid=-1 and
+        EXISTS (
+        SELECT menu_id FROM menu_role mr where mr.menu_id=mu.id AND role_id in
         <foreach collection="array" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -50,11 +51,40 @@
         LEFT JOIN menu sm on sm.parentid=m.id
     </select>
 
-    <select id="getMenuByParentid" resultType="Menu" parameterType="java.lang.Integer" >
+    <select id="getMenuByParentid" resultType="Menu" parameterType="java.lang.Integer">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from menu
         where parentid = #{parentid,jdbcType=INTEGER}
     </select>
-
+    <update id="updateByPrimaryKeySelective" parameterType="org.chinaos.model.Menu" >
+        update menu
+        <set >
+            <if test="url != null" >
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null" >
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="component != null" >
+                component = #{component,jdbcType=VARCHAR},
+            </if>
+            <if test="keepalive != null" >
+                keepAlive = #{keepalive,jdbcType=BIT},
+            </if>
+            <if test="requireauth != null" >
+                requireAuth = #{requireauth,jdbcType=BIT},
+            </if>
+            <if test="parentid != null" >
+                parentid = #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="iconcls != null" >
+                iconcls = #{iconcls,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -19,4 +19,10 @@ public interface MenuService {
      * @return java.util.List<org.chinaos.model.Menu>
      **/
     List<Menu> queryHasMenu();
+
+    /*
+     * description : 更新Menu
+     * @return java.lang.Integer
+     **/
+    Integer updateByPrimaryKeySelective(Menu menu);
 }

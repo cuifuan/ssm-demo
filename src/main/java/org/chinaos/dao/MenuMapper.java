@@ -18,4 +18,9 @@ public interface MenuMapper {
      * created by cfa  2018-08-23 下午 2:14
      **/
     List<Menu> getMenuByParentid(Integer parentid);
+    /*
+     * description : 更新Menu
+     * @return java.lang.Integer
+     **/
+    Integer updateByPrimaryKeySelective(Menu menu);
 }

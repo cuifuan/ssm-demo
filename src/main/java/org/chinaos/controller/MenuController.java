@@ -1,11 +1,12 @@
 package org.chinaos.controller;
 
+import org.chinaos.model.Menu;
 import org.chinaos.service.MenuService;
 import org.chinaos.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 菜单的控制器
@@ -21,10 +22,19 @@ public class MenuController {
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
     }
-
-    @GetMapping("/menu")
-    public ResultBean getMenu(@RequestParam(value = "id", defaultValue = "-1") Integer id) {
+    /*
+     * description : 返回带上泛型，清楚识别的返回类型
+     * @return org.chinaos.util.ResultBean<java.util.List<org.chinaos.model.Menu>>
+     **/
+    @RequestMapping(value = "/menu",method = RequestMethod.GET)
+    public ResultBean<List<Menu>> getMenu(@RequestParam(value = "id", defaultValue = "-1") Integer id) {
         return new ResultBean<>(menuService.getMenuByParentid(id));
     }
+
+    @RequestMapping(value = "/menu",method = RequestMethod.PUT)
+    public ResultBean<Integer> getMenu(@RequestBody Menu menu) {
+        return new ResultBean<>(menuService.updateByPrimaryKeySelective(menu));
+    }
+
 
 }
