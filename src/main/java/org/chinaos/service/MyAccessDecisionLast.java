@@ -43,7 +43,7 @@ import java.util.Iterator;
  * 包含安全拦截器将显示的AccessDecisionManager支持安全对象的类型。
  */
 @Service
-public class CustomAccessDecisionManager implements AccessDecisionManager {
+public class MyAccessDecisionLast implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
@@ -69,8 +69,10 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
             }
 
         }
+//        ResultBean resultBean=new ResultBean();
+//        resultBean.setMsg("权限不足");
+       throw new AccessDeniedException("权限不足");
 
-        throw new AccessDeniedException("权限不足");
     }
 
     @Override

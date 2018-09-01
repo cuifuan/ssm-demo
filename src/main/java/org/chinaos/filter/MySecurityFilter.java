@@ -1,8 +1,10 @@
 package org.chinaos.filter;
 
-import org.chinaos.service.CustomAccessDecisionManager;
-import org.chinaos.service.CustomInvocationSecurityMetadataSourceService;
+import org.chinaos.service.MyAccessDecisionLast;
+import org.chinaos.service.MatchUrlSecurity;
+import org.chinaos.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -15,18 +17,25 @@ import java.io.IOException;
 
 public class MySecurityFilter extends AbstractSecurityInterceptor implements Filter{
     @Autowired
-    private CustomInvocationSecurityMetadataSourceService mySecurityMetadataSource;
+    private MatchUrlSecurity mySecurityMetadataSource;
 
     @Autowired
-    private CustomAccessDecisionManager myAccessDecisionManager;
+    private MyAccessDecisionLast myAccessDecisionManager;
 
 //	@Autowired
 //	private AuthenticationManager authenticationManager;
 
     @PostConstruct
-    public void init(){
+    public ResultBean init(){
 //		super.setAuthenticationManager(authenticationManager);
-        super.setAccessDecisionManager(myAccessDecisionManager);
+        ResultBean resultBean=new ResultBean();
+        try{
+            super.setAccessDecisionManager(myAccessDecisionManager);
+        }catch (AccessDeniedException e){
+            resultBean.setMsg(e.toString());
+            return resultBean;
+        }
+        return resultBean;
     }
 
     @Override
@@ -36,13 +45,13 @@ public class MySecurityFilter extends AbstractSecurityInterceptor implements Fil
 
     @Override
     public SecurityMetadataSource obtainSecurityMetadataSource() {
-        System.out.println("filtergergetghrthetyetyetyetyj");
+        System.out.println("MySecurityFilter SecurityMetadataSource 加载元数据源...");
         return this.mySecurityMetadataSource;
     }
 
     @Override
     public void destroy() {
-        System.out.println("filter===========================end");
+        System.out.println("MySecurityFilter===========================destroy");
     }
 
     @Override
@@ -54,7 +63,7 @@ public class MySecurityFilter extends AbstractSecurityInterceptor implements Fil
     }
 
     private void invoke(FilterInvocation fi) throws IOException, ServletException {
-        System.out.println("filter..........................");
+        System.out.println("MySecurityFilter..........................invoke");
         InterceptorStatusToken  token = super.beforeInvocation(fi);
         try{
             fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
@@ -65,7 +74,7 @@ public class MySecurityFilter extends AbstractSecurityInterceptor implements Fil
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        System.out.println("filter===========================");
+        System.out.println("filter===========================init");
     }
 
 }

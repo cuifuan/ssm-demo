@@ -15,6 +15,7 @@
 
     <!--可自动注册登录表单-false-->
     <http auto-config="false" use-expressions="true">
+        <access-denied-handler ref="accessDeniedHandler"/>
         <!--关闭csrf防护-->
         <csrf disabled="true"/>
         <!--<intercept-url pattern="/login" access="hasRole('IS_AUTHENTICATED_ANONYMOUSLY')"/>-->
@@ -34,7 +35,7 @@
                 delete-cookies="true"/>
     </http>
 
-    <b:bean id="customUsernamePasswordAuthenticationFilter" class="org.chinaos.security.CustomAuthenticationFilter">
+    <b:bean id="customUsernamePasswordAuthenticationFilter" class="org.chinaos.security.JsonLoginFilter">
         <b:property name="authenticationManager" ref="authenticationManager"/>
         <b:property name="authenticationSuccessHandler" ref="customSuccessHandler"/>
         <b:property name="authenticationFailureHandler" ref="failureHandler"/>
@@ -48,13 +49,13 @@
         <b:constructor-arg name="strength" value="11"/>
     </b:bean>
     <!--登陆成功返回-->
-    <b:bean id="customSuccessHandler" class="org.chinaos.security.CustomAuthenticationSuccessHandler"/>
+    <b:bean id="customSuccessHandler" class="org.chinaos.security.LoginSuccessHandler"/>
     <!--失败返回-->
-    <b:bean id="failureHandler" class="org.chinaos.security.CustomAuthenticationFailureHandler"/>
+    <b:bean id="failureHandler" class="org.chinaos.security.LoginErrorHandler"/>
     <!--基本身份认证-->
     <b:bean id="myBasicAuthenticationEntryPoint" class="org.chinaos.security.MyBasicAuthenticationEntryPoint"/>
 
-    <b:bean id="logoutSuccessHandler" class="org.chinaos.security.LogoutSuccessHandler">
+    <b:bean id="logoutSuccessHandler" class="org.chinaos.security.LogoutHandler">
         <b:constructor-arg value="/logoutsuccess"/>
     </b:bean>
 
@@ -65,5 +66,6 @@
             <password-encoder ref="bCryptPasswordEncoder"/>
         </authentication-provider>
     </authentication-manager>
+    <b:bean id="accessDeniedHandler" class="org.chinaos.security.MyAccessDeniedHandler"/>
     <b:bean id="mySecurityFilter" class="org.chinaos.filter.MySecurityFilter"/>
 </b:beans>

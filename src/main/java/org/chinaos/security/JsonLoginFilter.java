@@ -11,7 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
-public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JsonLoginFilter extends UsernamePasswordAuthenticationFilter {
     private String jsonUsername;
     private String jsonPassword;
 
@@ -58,7 +58,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 this.jsonUsername = String.valueOf(maps.get("username"));
                 this.jsonPassword = String.valueOf(maps.get("password"));
             } catch (IOException e) {
-                logger.error("CustomAuthenticationFilter attemptAuthentication error:" + e.getMessage());
+                logger.error("JsonLoginFilter attemptAuthentication error:" + e.getMessage());
             }
         }
         return super.attemptAuthentication(request, response);

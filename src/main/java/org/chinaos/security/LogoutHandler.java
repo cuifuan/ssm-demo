@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+public class LogoutHandler extends SimpleUrlLogoutSuccessHandler {
 
     // Just for setting the default target URL
-    public LogoutSuccessHandler(String defaultTargetURL) {
+    public LogoutHandler(String defaultTargetURL) {
         this.setDefaultTargetUrl(defaultTargetURL);
     }
 

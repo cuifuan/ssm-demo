@@ -19,10 +19,11 @@ import java.util.*;
 
 /**
  * 系统启动时将资源和权限的对应信息关联起来
+ * 过滤器调用安全元数据源
  *
  */
 @Service
-public class CustomInvocationSecurityMetadataSourceService implements FilterInvocationSecurityMetadataSource {
+public class MatchUrlSecurity implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
     private ResourceMapper resourceMapper;
@@ -45,7 +46,6 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
     @PostConstruct
     private void loadResourceDefine() {
         resourceMap = new HashMap<>();
-
         List<Resource> resourceList = resourceMapper.findAll();
         for (Resource resource : resourceList) {
             List<Role> roles = roleResourceMapper.findRolesByResourceUrl(resource.getId());
@@ -57,8 +57,7 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
             }
             resourceMap.put(url, atts);
         }
-        System.out.println(resourceMap.toString());
-
+        System.out.println("url is all："+resourceMap.toString());
     }
 
     /**
@@ -66,27 +65,32 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        System.out.println("nwuidhwuiehdfu");
+        System.out.println("CustomInvocationSecurityMetadataSourceService getAttributes 根据url获取属性：url:"+object.toString());
         // object 是一个URL，被用户请求的url。
         FilterInvocation filterInvocation = (FilterInvocation) object;
         if (resourceMap == null) {
             loadResourceDefine();
         }
-        Iterator<String> ite = resourceMap.keySet().iterator();
+        for (String resURL : resourceMap.keySet()) {
+            RequestMatcher requestMatcher = new AntPathRequestMatcher(resURL);
+            if (requestMatcher.matches(filterInvocation.getHttpRequest())) {
+                return resourceMap.get(resURL);
+            }
+        }
+       /* Iterator<String> ite = resourceMap.keySet().iterator();
         while (ite.hasNext()) {
             String resURL = ite.next();
             RequestMatcher requestMatcher = new AntPathRequestMatcher(resURL);
             if(requestMatcher.matches(filterInvocation.getHttpRequest())) {
                 return resourceMap.get(resURL);
             }
-        }
-
+        }*/
         return null;
     }
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return new ArrayList<ConfigAttribute>();
+        return new ArrayList<>();
     }
 
     @Override

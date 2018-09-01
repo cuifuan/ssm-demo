@@ -8,7 +8,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
@@ -17,7 +16,7 @@ public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoi
             throws IOException {
         response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        PrintWriter writer = response.getWriter();
+//        PrintWriter writer = response.getWriter();
         ResultBean resultBean=new ResultBean();
         resultBean.setMsg("访问此资源需要完全身份验证");
         resultBean.setCode(401);
