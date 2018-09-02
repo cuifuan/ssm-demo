@@ -26,7 +26,7 @@ public class MenuController {
      * description : 返回带上泛型，清楚识别的返回类型
      * @return org.chinaos.util.ResultBean<java.util.List<org.chinaos.model.Menu>>
      **/
-    @RequestMapping(value = "/menu",method = RequestMethod.GET)
+    @RequestMapping(value = "/menu",method = RequestMethod.GET,name = "Menu菜单查询")
     public ResultBean<List<Menu>> getMenu(@RequestParam(value = "id", defaultValue = "-1") Integer id) {
         return new ResultBean<>(menuService.getMenuByParentid(id));
     }

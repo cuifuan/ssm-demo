@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!--************************************************过滤器配置************************************************-->
     <!--START 编码过滤器 设置UTF8-->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
@@ -23,9 +24,9 @@
     <!--END 编码过滤器 设置UTF8-->
 
     <!-- START 配置加载Spring文件的监听器-->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:applicationContext.xml</param-value>
+    <context-param><!--全局范围内环境参数初始化-->
+        <param-name>contextConfigLocation</param-name><!--参数名称-->
+        <param-value>classpath:applicationContext.xml</param-value><!--参数取值-->
     </context-param>
 
 
@@ -131,6 +132,7 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <!--配置错误页面-->
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/500</location>

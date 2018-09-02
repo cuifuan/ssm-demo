@@ -9,7 +9,7 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 配置扫描器 -->
-    <context:component-scan base-package="org.chinaos.controller,org.chinaos.exception"/>
+    <context:component-scan base-package="org.chinaos.controller,org.chinaos.exception,org.chinaos.configuration"/>
     <!-- 注解驱动：配置处理器映射器和适配器 -->
     <mvc:annotation-driven/>
 

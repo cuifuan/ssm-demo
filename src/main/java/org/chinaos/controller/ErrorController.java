@@ -22,11 +22,11 @@ public class ErrorController {
         Throwable t = (Throwable) request.getAttribute("javax.servlet.error.exception");
         throw new BadCredentialsException(t.getMessage());
     }
-    @RequestMapping("/hello")
+   /* @RequestMapping("/hello")
     public String hello(){
         return "hello";
     }
-
+*/
     @RequestMapping("/admin")
     public String admin(){
         return "admin";
