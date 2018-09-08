@@ -80,7 +80,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <!--查询所有地址-->
-    <select id="findAll" resultMap="ResultMapWithBLOBs">
+    <select id="findAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from resource

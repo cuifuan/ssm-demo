@@ -51,24 +51,30 @@ public class MyAccessDecisionLast implements AccessDecisionManager {
         if (configAttributes == null) {
             return;
         }
-
         Iterator<ConfigAttribute> ite = configAttributes.iterator();
 
-        while (ite.hasNext()) {
-            ConfigAttribute ca = ite.next();
-            String needRole = "ROLE_" + ca.getAttribute();
+        if(authentication.getAuthorities().size()>0){
+            while (ite.hasNext()) {
+                ConfigAttribute ca = ite.next();
+                String needRole = "ROLE_" + ca.getAttribute();
 
-            //ga 为用户所被赋予的权限。 needRole 为访问相应的资源应该具有的权限。
-            for (GrantedAuthority ga : authentication.getAuthorities()) {
+                //ga 为用户所被赋予的权限。 needRole 为访问相应的资源应该具有的权限。
+                for (GrantedAuthority ga : authentication.getAuthorities()) {
 
-                if (needRole.trim().equals(ga.getAuthority().trim())) {
+                    if (needRole.trim().equals(ga.getAuthority().trim())) {
 
-                    return;
+                        return;
+                    }
+
                 }
 
             }
-
+        }else {
+            throw new AccessDeniedException("权限不足");
         }
+
+
+
 //        ResultBean resultBean=new ResultBean();
 //        resultBean.setMsg("权限不足");
        throw new AccessDeniedException("权限不足");

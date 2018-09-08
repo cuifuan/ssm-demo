@@ -1,10 +1,8 @@
 package org.chinaos.filter;
 
-import org.chinaos.service.MyAccessDecisionLast;
 import org.chinaos.service.MatchUrlSecurity;
-import org.chinaos.util.ResultBean;
+import org.chinaos.service.MyAccessDecisionLast;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -25,7 +23,7 @@ public class MySecurityFilter extends AbstractSecurityInterceptor implements Fil
 //	@Autowired
 //	private AuthenticationManager authenticationManager;
 
-    @PostConstruct
+   /* @PostConstruct
     public ResultBean init(){
 //		super.setAuthenticationManager(authenticationManager);
         ResultBean resultBean=new ResultBean();
@@ -37,6 +35,12 @@ public class MySecurityFilter extends AbstractSecurityInterceptor implements Fil
         }
         return resultBean;
     }
+*/
+   @PostConstruct
+   public void init(){
+//		super.setAuthenticationManager(authenticationManager);
+       super.setAccessDecisionManager(myAccessDecisionManager);
+   }
 
     @Override
     public Class<?> getSecureObjectClass() {

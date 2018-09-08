@@ -30,8 +30,12 @@ public class MatchUrlSecurity implements FilterInvocationSecurityMetadataSource 
 
     @Autowired
     private RoleResourceMapper roleResourceMapper;
+    /*@Autowired
+    private HttpServletRequest request;*/
 
     private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
+
+//    private static Map<String, Collection<ConfigAttribute>> resourceUrl = null;
 
     /**
      * 在Web服务器启动时，提取系统中的所有权限。
@@ -46,18 +50,22 @@ public class MatchUrlSecurity implements FilterInvocationSecurityMetadataSource 
     @PostConstruct
     private void loadResourceDefine() {
         resourceMap = new HashMap<>();
+        StringBuilder urlHttp;
         List<Resource> resourceList = resourceMapper.findAll();
         for (Resource resource : resourceList) {
+            urlHttp=new StringBuilder();
             List<Role> roles = roleResourceMapper.findRolesByResourceUrl(resource.getId());
             String url = resource.getUrl();
+            String method = resource.getMethod();
             Collection<ConfigAttribute> atts = new ArrayList<>();
             for (Role role : roles) {
                 ConfigAttribute ca = new SecurityConfig(role.getType());
                 atts.add(ca);
             }
-            resourceMap.put(url, atts);
+            urlHttp.append(url).append(",").append(method);
+            resourceMap.put(urlHttp.toString(), atts);
         }
-        System.out.println("url is all："+resourceMap.toString());
+        System.out.println("url is all："+resourceMap.keySet().toString());
     }
 
     /**
@@ -65,26 +73,22 @@ public class MatchUrlSecurity implements FilterInvocationSecurityMetadataSource 
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        System.out.println("CustomInvocationSecurityMetadataSourceService getAttributes 根据url获取属性：url:"+object.toString());
         // object 是一个URL，被用户请求的url。
         FilterInvocation filterInvocation = (FilterInvocation) object;
         if (resourceMap == null) {
             loadResourceDefine();
         }
-        for (String resURL : resourceMap.keySet()) {
-            RequestMatcher requestMatcher = new AntPathRequestMatcher(resURL);
-            if (requestMatcher.matches(filterInvocation.getHttpRequest())) {
-                return resourceMap.get(resURL);
-            }
-        }
-       /* Iterator<String> ite = resourceMap.keySet().iterator();
+       Iterator<String> ite = resourceMap.keySet().iterator();
         while (ite.hasNext()) {
             String resURL = ite.next();
-            RequestMatcher requestMatcher = new AntPathRequestMatcher(resURL);
+            String[] resURLs = resURL.split(",");
+            String url=resURLs[0];
+            String method=resURLs[1];
+            RequestMatcher requestMatcher = new AntPathRequestMatcher(url,method);
             if(requestMatcher.matches(filterInvocation.getHttpRequest())) {
                 return resourceMap.get(resURL);
             }
-        }*/
+        }
         return null;
     }
 

@@ -1,5 +1,6 @@
 package org.chinaos.controller;
 
+import org.chinaos.util.ResultBean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,10 @@ public class ErrorController {
     }
 
     @RequestMapping("/500")
-    public void handlerFilterError(HttpServletRequest request){
+    public ResultBean handlerFilterError(HttpServletRequest request){
         Throwable t = (Throwable) request.getAttribute("javax.servlet.error.exception");
         throw new BadCredentialsException(t.getMessage());
+//        return new ResultBean<>(t.getMessage());
     }
    /* @RequestMapping("/hello")
     public String hello(){
