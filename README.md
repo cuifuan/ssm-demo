@@ -26,3 +26,7 @@
 
 - [利用RequestMappingHandlerMapping提取SpringMVC的@RequestMapping](https://blog.csdn.net/jdk2006/article/details/51500831 "利用RequestMappingHandlerMapping提取SpringMVC的@RequestMapping")
 - [Spring Security安全框架的详细讲解](https://github.com/qq1623299667/SpringBootSecurityDemo/blob/master/README.md "Spring Security安全框架的详细讲解")
+
+
+## 提交时备注错误
+- V1.0.0.14.T--------修复请求地址相同但请求方式不同的权限控制
