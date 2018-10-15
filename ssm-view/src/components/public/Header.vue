@@ -1,66 +1,42 @@
 <template>
-  <el-menu
-    :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
-    @select="handleSelect"
-    background-color="#2c3e50"
-    text-color="#fff"
-    active-text-color="#ffd04b">
-    <template v-for="(item,index) in navData">
-      <el-menu-item :key="index" :index="item.path" v-if="item.children.length===0">
-        <i :class="item.iconcls"></i>
-        <span>{{item.name}}</span>
-      </el-menu-item>
-      <el-submenu :key="index" :index="item.path" v-else>
-        <template slot="title">{{item.name}}</template>
-        <el-menu-item v-for="(child,index2) in item.children" :key="index+'-'+index2" :index="child.path">
-          {{child.name}}
-        </el-menu-item>
-      </el-submenu>
-    </template>
-    <!--用户名下拉框-->
-    <el-dropdown @command="handleCommand" class="home_userinfo">
-      <span class="el-dropdown-link">
-         {{currentUserName}}<i class="el-icon-arrow-down el-icon-right"></i>
+  <div id="header">
+    <div class="home_title">
+      <i class="iconfont icon-youhuiquan"></i>
+      <span>后台管理系统</span>
+    </div>
+    <div class="home_userinfoContainer">
+      <el-dropdown @command="handleCommand">
+      <span class="el-dropdown-link home_userinfo">
+        <i class="author"><img :src="srcuser" width="20" height="20"></i>
+        <span>{{currentUserName}}</span>
+        <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="logout" divided>注销</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-  </el-menu>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>个人中心</el-dropdown-item>
+          <el-dropdown-item>设置</el-dropdown-item>
+          <el-dropdown-item command="logout" divided>注销</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+  </div>
 </template>
 
 <script>
-  import {getRequest} from '../../utils/api'
   import {postRequest} from '../../utils/api'
+  import user from '@/assets/images/user.png'
 
   export default {
     name: "Header",
     data() {
       return {
-        activeIndex: '/home',
-        currentUserName: '',
-        navData: []
+        currentUserName: '游客',
+        srcuser: user
       }
-    },
-    watch: {
-      $route() {
-        this.activeIndex = this.$route.fullPath
-        this.navData = JSON.parse(sessionStorage.getItem('routes'))
-      }
-    },
-    mounted() {
-      this.activeIndex = this.$route.fullPath
     },
     created() {
-      this.navData = JSON.parse(sessionStorage.getItem('routes'))
       this.currentUserName = sessionStorage.getItem('username')
     },
     methods: {
-      handleSelect(key, keyPath) {
-        this.$router.push(key)
-      },
       handleCommand(command) {
         if (command === 'logout') {
           this.$confirm('注销登录吗?', '提示', {
@@ -89,26 +65,44 @@
 </script>
 
 <style scoped>
-  .el-menu-demo {
+  #header {
     width: 100%;
     height: 60px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 9999;
+    left: 0;
+    top: 0;
   }
 
   .home_userinfo {
-    /*position: absolute;*/
+    background-color: #2c3e50;
+    cursor: pointer;
+    margin-right: 30px;
+    color: cornsilk;
+    height: 20px;
+    display: inline-block;
+    line-height: 20px;
+  }
+
+  .home_title {
+    float: left;
+    color: #fff;
+    line-height: 60px;
+    font-size: 22px;
+    margin-left: 18px;
+  }
+
+  .home_userinfoContainer {
+    /*display: inline;*/
     float: right;
-    display: inline;
-    margin-right: 20px;
-    font-size: 15px;
-    margin-top: 20px;
+    line-height: 60px;
   }
 
-  .el-dropdown-link {
-    color: aliceblue;
-    font-size: 18px;
-  }
-
-  .nava {
-    display: block;
+  .author {
+    display: inline-block;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 10px;
   }
 </style>

@@ -22,6 +22,8 @@ public class Menu {
 
     private Boolean keepalive;
 
+    private Boolean key;
+
     private Boolean requireauth;
 
     private Integer parentid;

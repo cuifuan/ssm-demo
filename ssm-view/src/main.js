@@ -5,6 +5,7 @@ import ElementUI from 'element-ui'
 import '@/utils/global'//全局
 // import {postRequest} from '@/utils/api'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@/assets/icon/iconfont.css'
 import {postRequest} from '@/utils/api'
 import {getRequest} from '@/utils/api'
 import {putRequest} from '@/utils/api'

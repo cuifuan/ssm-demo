@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,9 +36,11 @@ public class User {
      */
     private String locked;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date lastTime;
+    private String lastTime;
+
+    private String salt;
 
     public User(User user) {
         this.id = user.getId();

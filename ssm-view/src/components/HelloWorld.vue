@@ -46,9 +46,9 @@
     },
     methods: {
        init(){
-         this.getRequest("/duanzi",this.params).then(res=> {
+        /* this.getRequest("/duanzi",this.params).then(res=> {
            console.log(res.data)
-         })
+         })*/
        },
       handleClick(tab, event) {
         console.log(tab, event);

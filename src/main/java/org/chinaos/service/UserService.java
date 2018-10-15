@@ -1,5 +1,7 @@
 package org.chinaos.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.chinaos.dao.MenuMapper;
 import org.chinaos.dao.RoleMapper;
 import org.chinaos.dao.UserMapper;
@@ -89,6 +91,10 @@ public class UserService implements UserDetailsService {
         return new MyUserDetails(user, roles);
     }
 
-
+    public PageInfo<User> getUserList(PageInfo page){
+        PageHelper.startPage(page.getPageNum(),page.getPageSize());
+        List<User> list =userMapper.getAllByPage();
+        return new PageInfo<>(list);
+    }
 
 }

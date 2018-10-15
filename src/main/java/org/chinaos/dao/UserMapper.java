@@ -21,7 +21,7 @@ public interface UserMapper {
 
     int lockedByUserId(Integer id);
 
-    List<User> getAllByPage(User user);
+    List<User> getAllByPage();
 
     int updateUserSelective(User user);
 

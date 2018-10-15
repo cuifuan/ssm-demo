@@ -1,9 +1,11 @@
 package org.chinaos.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.chinaos.model.Menu;
+import org.chinaos.model.User;
+import org.chinaos.service.AreaService;
 import org.chinaos.service.MenuService;
 import org.chinaos.service.UserService;
-import org.chinaos.service.AreaService;
 import org.chinaos.util.ResultBean;
 import org.chinaos.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +92,12 @@ public class UserController {
     public String changePasswordPage() {
         return "changePasswordPage";
     }
-
-
+    /*
+     * description : 返回用户列表
+     * @return org.chinaos.util.ResultBean<com.github.pagehelper.PageInfo<org.chinaos.model.User>>
+     **/
+    @GetMapping("user")
+    public ResultBean<PageInfo<User>> getUser(PageInfo pageInfo){
+        return new ResultBean<>(userService.getUserList(pageInfo));
+    }
 }

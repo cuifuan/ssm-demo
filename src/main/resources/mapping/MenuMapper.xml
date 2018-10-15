@@ -13,6 +13,7 @@
         <result column="requireAuth" property="requireauth" jdbcType="BIT"/>
         <result column="parentid" property="parentid" jdbcType="INTEGER"/>
         <result column="iconCls" property="iconcls" jdbcType="VARCHAR"/>
+        <result column="key" property="key" jdbcType="BIT"/>
         <collection property="children" ofType="Menu" javaType="ArrayList">
             <result column="ids" property="id" jdbcType="INTEGER"/>
             <result column="urls" property="url" jdbcType="VARCHAR"/>
@@ -23,10 +24,11 @@
             <result column="requireAuths" property="requireauth" jdbcType="BIT"/>
             <result column="parentids" property="parentid" jdbcType="INTEGER"/>
             <result column="iconClss" property="iconcls" jdbcType="VARCHAR"/>
+            <result column="keys" property="key" jdbcType="BIT"/>
         </collection>
     </resultMap>
     <sql id="Base_Column_List">
-        id, url, path, name, component, keepAlive, requireAuth, parentid, iconCls
+        id, url, path, name, component, keepAlive, requireAuth, parentid, iconCls,`key`
     </sql>
     <sql id="Base_Column_Lists">
         id AS ids,url AS urls,path AS paths,name AS names,component AS components
@@ -36,7 +38,7 @@
         select m.*,sm.id AS ids,
         sm.url AS urls,sm.path AS paths,sm.name AS names,sm.component AS components,
         sm.keepAlive AS keepAlives,sm.requireAuth AS requireAuths,
-        sm.parentid AS parentids,sm.iconCls AS iconClss
+        sm.parentid AS parentids,sm.iconCls AS iconClss,sm.key AS `keys`
         from (
         SELECT
         <include refid="Base_Column_List"/>
