@@ -8,7 +8,7 @@ import org.chinaos.dao.UserMapper;
 import org.chinaos.model.MyUserDetails;
 import org.chinaos.model.Role;
 import org.chinaos.model.User;
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

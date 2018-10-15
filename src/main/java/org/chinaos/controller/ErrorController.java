@@ -1,6 +1,6 @@
 package org.chinaos.controller;
 
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

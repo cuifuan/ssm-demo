@@ -76,7 +76,6 @@
   }
 
   .home_userinfo {
-    background-color: #2c3e50;
     cursor: pointer;
     margin-right: 30px;
     color: cornsilk;

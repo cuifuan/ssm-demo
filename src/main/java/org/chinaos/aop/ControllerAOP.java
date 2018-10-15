@@ -1,23 +1,27 @@
-package org.chinaos.util;
+package org.chinaos.aop;
 
-import org.chinaos.beans.ResultBean;
-import org.chinaos.exception.CheckException;
-import org.chinaos.exception.UnloginException;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.chinaos.beans.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 /**
  * 处理和包装异常
+ *
+ * @author 晓风轻 https://github.com/xwjie/PLMCodeTemplate
  */
+@Aspect
 public class ControllerAOP {
-    private static final Logger logger = LoggerFactory.getLogger(ControllerAOP.class);
+    private static Logger logger = LoggerFactory.getLogger(ControllerAOP.class);
 
+    //切点方法
     public Object handlerControllerMethod(ProceedingJoinPoint pjp) {
         long startTime = System.currentTimeMillis();
 
         ResultBean<?> result;
-
         try {
             result = (ResultBean<?>) pjp.proceed();
             logger.info(pjp.getSignature() + "use time:" + (System.currentTimeMillis() - startTime));
@@ -33,20 +37,11 @@ public class ControllerAOP {
      */
     private ResultBean<?> handlerException(ProceedingJoinPoint pjp, Throwable e) {
         ResultBean<?> result = new ResultBean();
-
-        // 已知异常
-        if (e instanceof CheckException) {
-            result.setMsg(e.getLocalizedMessage());
-            result.setCode(ResultBean.FAIL);
-        } else if (e instanceof UnloginException) {
-            result.setMsg("Unlogin");
-            result.setCode(ResultBean.NO_LOGIN);
-        } else {
-            logger.error(pjp.getSignature() + " error ", e);
-            //TODO 未知的异常，应该格外注意，可以发送邮件通知等
-            result.setMsg(e.toString());
-            result.setCode(ResultBean.FAIL);
-        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("错误信息[").append(e.getLocalizedMessage()).append("]错误详细信息===》").append(Arrays.toString(e.getStackTrace()));
+        logger.error(stringBuilder.toString());
+        result.setMsg(stringBuilder.toString());
+        result.setCode(ResultBean.FAIL);
         return result;
     }
 }

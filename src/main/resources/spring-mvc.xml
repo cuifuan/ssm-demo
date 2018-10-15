@@ -2,12 +2,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd">
+    http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!-- 配置扫描器 -->
     <context:component-scan base-package="org.chinaos.controller,org.chinaos.exception,org.chinaos.configuration"/>
     <!-- 注解驱动：配置处理器映射器和适配器 -->
@@ -27,5 +28,13 @@
             <bean class="org.chinaos.filter.HeadersCORSFilter"/>
         </mvc:interceptor>
     </mvc:interceptors >-->
-
+    <aop:aspectj-autoproxy />
+    <bean id="controllerAop" class="org.chinaos.aop.ControllerAOP" />
+    <aop:config>
+        <aop:aspect id="myAop" ref="controllerAop">
+            <aop:pointcut id="target"
+                          expression="execution(public org.chinaos.beans.* *(..))" />
+            <aop:around method="handlerControllerMethod" pointcut-ref="target" />
+        </aop:aspect>
+    </aop:config>
 </beans>

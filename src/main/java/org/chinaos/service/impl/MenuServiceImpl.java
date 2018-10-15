@@ -5,7 +5,7 @@ import org.chinaos.model.Menu;
 import org.chinaos.model.MyUserDetails;
 import org.chinaos.model.Role;
 import org.chinaos.service.MenuService;
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.chinaos.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

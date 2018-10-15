@@ -6,7 +6,7 @@ import org.chinaos.model.User;
 import org.chinaos.service.AreaService;
 import org.chinaos.service.MenuService;
 import org.chinaos.service.UserService;
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.chinaos.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -94,7 +94,7 @@ public class UserController {
     }
     /*
      * description : 返回用户列表
-     * @return org.chinaos.util.ResultBean<com.github.pagehelper.PageInfo<org.chinaos.model.User>>
+     * @return org.chinaos.beans.ResultBean<com.github.pagehelper.PageInfo<org.chinaos.model.User>>
      **/
     @GetMapping("user")
     public ResultBean<PageInfo<User>> getUser(PageInfo pageInfo){

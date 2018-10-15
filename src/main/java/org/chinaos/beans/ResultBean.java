@@ -1,4 +1,4 @@
-package org.chinaos.util;
+package org.chinaos.beans;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,5 +37,20 @@ public class ResultBean<T> implements Serializable {
         super();
         this.msg = e.toString();
         this.code = FAIL;
+    }
+
+    public ResultBean setMsg(String msg) {
+       this.msg = msg;
+       return this;
+    }
+
+    public ResultBean setCode(int code) {
+        this.code = code;
+        return this;
+    }
+
+    public ResultBean setData(T data) {
+        this.data = data;
+        return this;
     }
 }

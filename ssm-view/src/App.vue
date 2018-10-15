@@ -50,6 +50,10 @@
 
 
 <style>
+  *{
+    margin: 0;
+    padding: 0;
+  }
   html, body {
     height: 100%;
     width: 100%;
@@ -101,14 +105,31 @@
     padding-top: 60px;
   }
 
-  .main {
-    margin-top: 20px;
+  .el-main {
     width: 100%;
+    padding: 10px 5px 0 5px;
+    margin: 0;
   }
   .el-scrollbar__wrap {
     overflow-x: hidden;
   }
-  .el-main {
-    width: 100%;
+  .el-table {
+    margin-top: 10px;
+  }
+  .el-table th {
+    background-color: #013859;
+    text-align: center;
+    color: #F5F5F5;
+    border-right: 1px solid #F5F5F5;
+    font-weight: normal;
+  }
+  .el-table td {
+    height: 5%;
+    text-align: center;
+  }
+  .el-button--danger {
+    color: #F5F5F5;
+    background-color: #EB3E4A;
+    border-color: #EB3E4A;
   }
 </style>

@@ -2,7 +2,7 @@ package org.chinaos.controller;
 
 import org.chinaos.model.Menu;
 import org.chinaos.service.MenuService;
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class MenuController {
     }
     /*
      * description : 返回带上泛型，清楚识别的返回类型
-     * @return org.chinaos.util.ResultBean<java.util.List<org.chinaos.model.Menu>>
+     * @return org.chinaos.beans.ResultBean<java.util.List<org.chinaos.model.Menu>>
      **/
     @RequestMapping(value = "/menu",method = RequestMethod.GET,name = "Menu菜单查询")
     public ResultBean<List<Menu>> getMenu(@RequestParam(value = "id", defaultValue = "-1") Integer id) {

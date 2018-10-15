@@ -3,19 +3,19 @@
     <el-table ref="singleTable" :data="tableData" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
       <el-table-column type="index" label="ID" width="50">
       </el-table-column>
-      <el-table-column property="username" label="用户名" width="160">
+      <el-table-column property="username" label="用户名" width="190%">
       </el-table-column>
-      <el-table-column property="email" label="邮箱" width="160">
+      <el-table-column property="email" label="邮箱" width="180%">
       </el-table-column>
-      <el-table-column property="enable" label="是否启用" width="80">
+      <el-table-column property="enable" label="是否启用" width="100%">
       </el-table-column>
-      <el-table-column property="locked" label="是否锁定" width="80">
+      <el-table-column property="locked" label="是否锁定" width="100%">
       </el-table-column>
-      <el-table-column property="createTime" label="创建时间" width="170">
+      <el-table-column property="createTime" label="创建时间" width="180%">
       </el-table-column>
-      <el-table-column property="lastTime" label="最后登录时间" width="170">
+      <el-table-column property="lastTime" label="最后登录时间" width="180%">
       </el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="160%">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑
           </el-button>

@@ -1,11 +1,9 @@
 package org.chinaos.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.chinaos.dao.AreaMapper;
 import org.chinaos.model.Area;
 import org.chinaos.service.AreaService;
-import org.chinaos.util.ResultBean;
 import org.common.Common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,11 +33,10 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public ResultBean getAreaAll(Map<String,Integer> map) {
+    public List<Area> getAreaAll(Map<String,Integer> map) {
         PageHelper.startPage(map.get("pageNo"),map.get("pageSize"));
-        List<Area> list =areaMapper.getAreaAll();
-        PageInfo<Area> pageInfo = new PageInfo<>(list);
-        return new ResultBean<>(pageInfo);
+//        List<Area> list =
+        return areaMapper.getAreaAll();
     }
 
 

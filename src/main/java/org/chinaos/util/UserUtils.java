@@ -1,7 +1,7 @@
 package org.chinaos.util;
 
+import org.chinaos.beans.ResultBean;
 import org.chinaos.model.MyUserDetails;
-import org.chinaos.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * 被验证的委托人的身份

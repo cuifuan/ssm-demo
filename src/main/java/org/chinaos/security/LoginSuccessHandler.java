@@ -1,7 +1,7 @@
 package org.chinaos.security;
 
 import com.alibaba.fastjson.JSON;
-import org.chinaos.util.ResultBean;
+import org.chinaos.beans.ResultBean;
 import org.chinaos.util.UserUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
